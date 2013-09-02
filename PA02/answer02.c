@@ -113,7 +113,7 @@ void my_strcpy(char * s1, const char * s2)
 void my_strncpy(char * s1, const char * s2, int num)
 {
   int x = 0;
-  while(x!=n)
+  while(x!=num)
     {
       s1[x]=s2[x];
       x++;
@@ -133,7 +133,18 @@ void my_strncpy(char * s1, const char * s2, int num)
  */
 void my_strcat(char * s1, const char * s2) 
 {
-    
+  int length = 0;
+  int x = 0;
+  while(*s1[length]!='\0')
+      length++;
+  while(*s2[x]!='\0')
+    {
+      s1[length]=s2[x];
+      length++;
+      x++;
+    }
+  s1[length]='\0';
+  return s1;
 }
 
 /** 
@@ -147,7 +158,18 @@ void my_strcat(char * s1, const char * s2)
  */
 void my_strncat(char * s1, const char * s2, int num)
 {
-   
+  int length = 0;
+  int x = 0;
+  while(*s1[length]!='\0')
+    length++;
+  while(x!=num)
+    {
+      s1[length]=s2[x];
+      length++;      
+      x++;
+    }
+  s1[length]='\0';
+  return a1;
 }
 
 /**
@@ -162,6 +184,7 @@ void my_strncat(char * s1, const char * s2, int num)
 
 const char *my_strstr(const char * s1, const char * s2)
 {
+
     return NULL;
 }
 
