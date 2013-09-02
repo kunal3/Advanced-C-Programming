@@ -68,7 +68,14 @@ void my_strupper(char * s)
  */
 void my_strlower(char * s)
 {
-
+  int x = 0;
+  while(*s[x]!='\0');
+  {
+    if(s[x]>64 && s[x]<91)
+      s[x]=tolower(s[x]);
+    x++;
+  }
+  return s;
 }
 
 /**
@@ -83,7 +90,14 @@ void my_strlower(char * s)
  */
 void my_strcpy(char * s1, const char * s2)
 {
-
+  int x = 0;
+  while(*s2[x]!='\0')
+    {
+      s1[x]=s2[x];
+      x++;
+    }
+  s1[x]='\0';
+  return s1;
 }
 
 /**
@@ -98,7 +112,13 @@ void my_strcpy(char * s1, const char * s2)
  */
 void my_strncpy(char * s1, const char * s2, int num)
 {
-    
+  int x = 0;
+  while(x!=n)
+    {
+      s1[x]=s2[x];
+      x++;
+    }
+  return s1;
 }
 
 
