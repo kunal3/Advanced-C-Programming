@@ -240,7 +240,35 @@ const char *my_strstr(const char * s1, const char * s2)
  */
 void my_strinsert(char *s1, const char *s2, int pos)
 {
-  
+  int length1 = 0;
+  int length2 = 0;
+
+  while(s1[length1]!='\0')
+    length1++;
+
+  while(s2[length2]!='\0')
+    length2++;
+
+  if(pos > length1)
+    my_strcat(s1,s2);
+
+  else
+    {
+      int x = length1-1;
+      int i = 0;
+      for(i = length1+length2-1; i > pos+length2-1; i--)
+	{
+	  s1[i]=s1[x];
+	  x--;
+	}
+      x=0;
+      for(i = pos ; i < pos+length2; i++)
+	{
+	  s1[i]=s2[x];
+	  x++;
+	}
+      s1[length1+length2]='\0';
+    }
 }
 
 /**
