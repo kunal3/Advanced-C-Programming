@@ -10,11 +10,9 @@
 int my_strlen(const char * s)
 {
   int length = 0;
-  while (s[length]!='\0')
-    {
+  while (s[length]!='\0') /* Counts until it reaches null at the end of the string */
       length++;
-    }
-    return length;
+  return length;
 }
 
 /**
@@ -25,8 +23,8 @@ int my_strlen(const char * s)
  */
 int my_countchar(const char * s, char c)
 {
-  int x = 0;
-  int count  = 0;
+  int x = 0;            /* variable for going through the char array */
+  int count  = 0;       /* variable for counting the occurences */
   while(s[x]!='\0')
     {
       if(s[x]==c)
@@ -50,7 +48,7 @@ void my_strupper(char * s)
   int x = 0;
   while(s[x]!='\0')
     {
-      if(s[x]<123 && s[x]>96)
+      if(s[x]<123 && s[x]>96)  /* checking if the given char is a lower case alphabet*/
 	s[x]=toupper(s[x]);
       x++;
     }
@@ -70,7 +68,7 @@ void my_strlower(char * s)
   int x = 0;
   while(s[x]!='\0')
   {
-    if(s[x]<91 && s[x]>64)
+    if(s[x]<91 && s[x]>64)  /* checking if the given char is an upper case alphabet*/
       s[x]=tolower(s[x]);
     x++;
   }
@@ -94,7 +92,7 @@ void my_strcpy(char * s1, const char * s2)
       s1[x]=s2[x];
       x++;
     }
-  s1[x]='\0';
+  s1[x]='\0';  /* ends s1 wherever s2 ends*/
 }
 
 /**
@@ -110,12 +108,14 @@ void my_strcpy(char * s1, const char * s2)
 void my_strncpy(char * s1, const char * s2, int num)
 {
   int x = 0;
+
   while(x!=num)
     {
       s1[x]=s2[x];
       x++;
     }
-  s1[x]='\0';
+
+  s1[x]='\0'; /* ends s1 at num after copying s2 in it*/
 }
 
 
@@ -132,15 +132,18 @@ void my_strcat(char * s1, const char * s2)
 {
   int length = 0;
   int x = 0;
+
   while(s1[length]!='\0')
       length++;
+
   while(s2[x]!='\0')
     {
       s1[length]=s2[x];
       length++;
       x++;
     }
-  s1[length]='\0';
+
+  s1[length]='\0'; /* ends s1 after adding s2*/
 }
 
 /** 
@@ -156,15 +159,17 @@ void my_strncat(char * s1, const char * s2, int num)
 {
   int length = 0;
   int x = 0;
+
   while(s1[length]!='\0')
     length++;
+
   while(x!=num)
     {
       s1[length]=s2[x];
       length++;      
       x++;
     }
-  s1[length]='\0';
+  s1[length]='\0'; /* ends s1 after adding num number of chars from s2*/
 }
 
 /**
@@ -179,31 +184,30 @@ void my_strncat(char * s1, const char * s2, int num)
 
 const char *my_strstr(const char * s1, const char * s2)
 {
-  int x = 0;
-  int length = 0;
-  int match = 0;
+  int x = 0;            /* match counter*/
+  int length = 0;       /* variable for going through s1 and its length*/
   int start = 0;
   char *ptr = '\0';
+
   while(s1[length]!='\0')
     {
-      if(s1[length]==s2[x])
+      if(s1[length]==s2[x])  /* if a char of s1 and s2 match*/
 	{
-	  if(x==0)
-	    start = length;
-	  match++;
-	  x++;
+	  if(x==0)           /* if this is the first time a char from s1 and s2 match */
+	    start = length;  /* mark this index as the potential start of s2 */
+	  x++;  
 	}
       else
 	{
-	  x=0;
+	  x=0;               /* if the chars from s1 and s2 don't match, reset the match counter*/
 	}
-      length++;
+      length++;              /* while s1's index counter keeps going*/
 
-      if(s2[x]=='\0')
+      if(s2[x]=='\0')        /* if the match counter reaches the end of s2 without resetting */
 	{
 	  int i = 0;
 	  for(i = start; i < length; i++)
-	    ptr+=s1[i];
+	    ptr+=s1[i];      /* copy that substring of s1 to a new string */
 	}
     }
 
@@ -240,8 +244,8 @@ const char *my_strstr(const char * s1, const char * s2)
  */
 void my_strinsert(char *s1, const char *s2, int pos)
 {
-  int length1 = 0;
-  int length2 = 0;
+  int length1 = 0;       /* length of s1 */
+  int length2 = 0;       /* length of s2 */
 
   while(s1[length1]!='\0')
     length1++;
@@ -249,25 +253,25 @@ void my_strinsert(char *s1, const char *s2, int pos)
   while(s2[length2]!='\0')
     length2++;
 
-  if(pos > length1)
-    my_strcat(s1,s2);
+  if(pos > length1)      /* if the char position is higher or equal to the  */
+    my_strcat(s1,s2);    /* length of s1, do my_strcat(s1,s2) */
 
   else
     {
       int x = length1-1;
       int i = 0;
-      for(i = length1+length2-1; i > pos+length2-1; i--)
-	{
-	  s1[i]=s1[x];
+      for(i = length1+length2-1; i > pos+length2-1; i--) /* this loop copies */
+	{                       /* contents of s1 after pos to their new loc */
+	  s1[i]=s1[x];          /* from the back of string going forward     */
 	  x--;
 	}
       x=0;
-      for(i = pos ; i < pos+length2; i++)
+      for(i = pos ; i < pos+length2; i++) /* this loop puts s2 in pos location in s1*/
 	{
 	  s1[i]=s2[x];
 	  x++;
 	}
-      s1[length1+length2]='\0';
+      s1[length1+length2]='\0'; /* ending s1 after adding s2 at pos */
     }
 }
 
@@ -303,6 +307,30 @@ void my_strinsert(char *s1, const char *s2, int pos)
  */
 void my_strdelete(char *s, int pos, int length)
 {
-  
+  int slen = 0;
+  while(s[slen]!='\0')
+    slen++;
+
+  if(pos >= slen) /* case 1 where pos is higher or equal to length of s*/
+    return;
+  else
+    {
+      if(pos+length >= slen) /* case 2 where the entire array after pos */
+	s[pos]='\0';         /* is to be deleted */
+      else 
+	{  /* case 3 where a portion from the middle of s is to be deleted  */
+	  int i = 0;
+	  int x = 0;
+	  for(i = pos; i < slen-length; i++) /* goes from pos to pos+(locations left after deleting) */
+	    {
+	      if(s[pos+length+x]!='\0')      /* checks if we haven't reached the end of s */
+		{
+		  s[i]=s[pos+length+x];
+		  x++;
+		}
+	    }
+	  s[pos+slen-length]='\0';        /* terminates s after deleting a middle portion */
+	}
+    }
 }
 
