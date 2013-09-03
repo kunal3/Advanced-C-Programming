@@ -10,7 +10,7 @@
 int my_strlen(const char * s)
 {
   int length = 0;
-  while (*s[length]!='\0')
+  while (s[length]!='\0')
     {
       length++;
     }
@@ -27,7 +27,7 @@ int my_countchar(const char * s, char c)
 {
   int x = 0;
   int count  = 0;
-  while(*s[x]!='\0')
+  while(s[x]!='\0')
     {
       if(s[x]==c)
 	count++;
@@ -48,13 +48,12 @@ int my_countchar(const char * s, char c)
 void my_strupper(char * s)
 {
   int x = 0;
-  while(*s[x]!='\0')
+  while(s[x]!='\0')
     {
       if(s[x]<123 && s[x]>96)
 	s[x]=toupper(s[x]);
       x++;
     }
-  return s;
 }
 
 /**
@@ -69,13 +68,12 @@ void my_strupper(char * s)
 void my_strlower(char * s)
 {
   int x = 0;
-  while(*s[x]!='\0');
+  while(s[x]!='\0');
   {
     if(s[x]>64 && s[x]<91)
       s[x]=tolower(s[x]);
     x++;
   }
-  return s;
 }
 
 /**
@@ -91,13 +89,12 @@ void my_strlower(char * s)
 void my_strcpy(char * s1, const char * s2)
 {
   int x = 0;
-  while(*s2[x]!='\0')
+  while(s2[x]!='\0')
     {
       s1[x]=s2[x];
       x++;
     }
   s1[x]='\0';
-  return s1;
 }
 
 /**
@@ -118,7 +115,6 @@ void my_strncpy(char * s1, const char * s2, int num)
       s1[x]=s2[x];
       x++;
     }
-  return s1;
 }
 
 
@@ -135,16 +131,15 @@ void my_strcat(char * s1, const char * s2)
 {
   int length = 0;
   int x = 0;
-  while(*s1[length]!='\0')
+  while(s1[length]!='\0')
       length++;
-  while(*s2[x]!='\0')
+  while(s2[x]!='\0')
     {
       s1[length]=s2[x];
       length++;
       x++;
     }
   s1[length]='\0';
-  return s1;
 }
 
 /** 
@@ -160,7 +155,7 @@ void my_strncat(char * s1, const char * s2, int num)
 {
   int length = 0;
   int x = 0;
-  while(*s1[length]!='\0')
+  while(s1[length]!='\0')
     length++;
   while(x!=num)
     {
@@ -169,7 +164,6 @@ void my_strncat(char * s1, const char * s2, int num)
       x++;
     }
   s1[length]='\0';
-  return a1;
 }
 
 /**
@@ -184,6 +178,8 @@ void my_strncat(char * s1, const char * s2, int num)
 
 const char *my_strstr(const char * s1, const char * s2)
 {
+  int x = 0;
+  char *ptr;
 
     return NULL;
 }
