@@ -68,9 +68,9 @@ void my_strupper(char * s)
 void my_strlower(char * s)
 {
   int x = 0;
-  while(s[x]!='\0');
+  while(s[x]!='\0')
   {
-    if(s[x]>64 && s[x]<91)
+    if(s[x]<91 && s[x]>64)
       s[x]=tolower(s[x]);
     x++;
   }
@@ -115,6 +115,7 @@ void my_strncpy(char * s1, const char * s2, int num)
       s1[x]=s2[x];
       x++;
     }
+  s1[x]='\0';
 }
 
 
@@ -179,9 +180,34 @@ void my_strncat(char * s1, const char * s2, int num)
 const char *my_strstr(const char * s1, const char * s2)
 {
   int x = 0;
-  char *ptr;
+  int length = 0;
+  int match = 0;
+  int start = 0;
+  char *ptr = '\0';
+  while(s1[length]!='\0')
+    {
+      if(s1[length]==s2[x])
+	{
+	  if(x==0)
+	    start = length;
+	  match++;
+	  x++;
+	}
+      else
+	{
+	  x=0;
+	}
+      length++;
 
-    return NULL;
+      if(s2[x]=='\0')
+	{
+	  int i = 0;
+	  for(i = start; i < length; i++)
+	    ptr+=s1[i];
+	}
+    }
+
+    return ptr;
 }
 
 
