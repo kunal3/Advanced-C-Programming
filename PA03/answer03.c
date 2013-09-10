@@ -62,6 +62,9 @@
 
 int * readIntegers(const char * filename, int * numberOfIntegers)
 {
+  FILE * fp;
+  fp = fopen(filename, r);
+  while(fscanf(fp,%i )
     return NULL;
 }
 
