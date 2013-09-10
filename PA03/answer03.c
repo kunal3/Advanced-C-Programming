@@ -64,10 +64,14 @@ int * readIntegers(const char * filename, int * numberOfIntegers)
 {
   int temp;
   int size=0;
+  int counter = 0;
 
   FILE * fp;
   fp = fopen(filename,"r");
+  if (fp==NULL)
+    return NULL;
 
+  /*
   while(!feof(fp))
     {
       if(!feof(fp))
@@ -76,22 +80,24 @@ int * readIntegers(const char * filename, int * numberOfIntegers)
 	  size++;
 	}
     }
+*/
+
+  while(fscanf(fp, "%d", &temp)==1 && !feof(fp))
+    size++;
 
   *numberOfIntegers = malloc(sizeof(int)*size);
-  size = 0;
 
   fseek (fp, 0, SEEK_SET);
 
-  int arr[*numberOfIntegers]=NULL;
+  int arr[size];
 
-  while (!feof(fp))
+  while (fscanf(fp, "%d", &temp)==1 && !feof(fp))
     {
-      if(!feof(fp))
-	{
-	  fscanf(fp, "%d", &temp);
-	  arr[size] = &temp;
-	}
+      arr[counter] = temp;
+      counter++;
     }
+
+  fclose(fp);
   return arr;
 }
 
