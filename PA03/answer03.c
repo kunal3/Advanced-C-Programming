@@ -62,36 +62,27 @@
 
 int * readIntegers(const char * filename, int * numberOfIntegers)
 {
-  int temp;
-  int size=0;
+  int temp = 0;
+  int size = 0;
   int counter = 0;
 
   FILE * fp;
   fp = fopen(filename,"r");
+
   if (fp==NULL)
     return NULL;
 
-  /*
-  while(!feof(fp))
-    {
-      if(!feof(fp))
-	{
-	  fscanf(fp, "%d", &temp);
-	  size++;
-	}
-    }
-*/
-
-  while(fscanf(fp, "%d", &temp)==1 && !feof(fp))
+  while(fscanf(fp, "%d", &temp)==1)
     size++;
 
-  *numberOfIntegers = malloc(sizeof(int)*size);
+  *numberOfIntegers = size;
 
   fseek (fp, 0, SEEK_SET);
 
-  int arr[size];
+  int * arr;
+  arr = malloc (sizeof(int) * size);
 
-  while (fscanf(fp, "%d", &temp)==1 && !feof(fp))
+  while (fscanf(fp, "%d", &temp)==1)
     {
       arr[counter] = temp;
       counter++;
@@ -140,7 +131,33 @@ int * readIntegers(const char * filename, int * numberOfIntegers)
  */
 void sort(int * arr, int length)
 {
-    
+  if(length <= 1)
+    return;
+  sorthelper(arr, 0, length-1);
+
+}
+
+void sorthelper(int * arr, int low, int high)
+{
+  int pivot = arr[l0];
+  while( low <= high )
+    {
+      while(arr[low] < pivot)
+	low +=1;
+      while(arr[high] > pivot)
+	high -= 1;
+      if (low <= high)
+	{
+	  int temp=0;
+	  temp = arr[low];
+	  arr[low] = arr[high];
+	  arr[high] = temp;
+	  low += 1;
+	  high += 1;
+	}
+    }
+  sorthelper(arr, 0, high);
+  sorthelper(arr, low, lastindex);
 }
 
 /**
@@ -191,5 +208,4 @@ int search(int * arr, int length, int key)
 {
     return -1;
 }
-
 
