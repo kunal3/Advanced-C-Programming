@@ -129,6 +129,9 @@ int * readIntegers(const char * filename, int * numberOfIntegers)
  * sort.
  *
  */
+
+void sorthelper(int *,int,int);
+
 void sort(int * arr, int length)
 {
   if(length <= 1)
@@ -139,25 +142,71 @@ void sort(int * arr, int length)
 
 void sorthelper(int * arr, int low, int high)
 {
-  int pivot = arr[l0];
-  while( low <= high )
+  int left = low;
+  int right = high;
+  int pivot = arr[low];
+  int temp = 0;
+
+  if(low<high)
     {
-      while(arr[low] < pivot)
-	low +=1;
-      while(arr[high] > pivot)
-	high -= 1;
-      if (low <= high)
+      while (left<right)
 	{
-	  int temp=0;
-	  temp = arr[low];
-	  arr[low] = arr[high];
-	  arr[high] = temp;
-	  low += 1;
-	  high += 1;
+	  while(arr[left]<=pivot && left<high)
+	    left++;
+	  while(arr[right]>pivot)
+	    right--;
+	  if(left<right)
+	    {
+	      temp=arr[left];
+	      arr[left]=arr[right];
+	      arr[right]=temp;
+	    }
 	}
+
+      temp = pivot;
+      arr[low]=arr[right];
+      arr[right]=pivot;
+      sorthelper(arr, low, right-1);
+      sorthelper(arr, right+1, high);
     }
-  sorthelper(arr, 0, high);
-  sorthelper(arr, low, lastindex);
+
+
+
+  /*
+  if (left >= right)
+    return;
+
+  left++;
+
+  while( left < right )
+    {
+      while(arr[left] <= pivot && left < right)
+	left +=1;
+
+      while(arr[right] >= pivot && left < right)
+	right -= 1;
+
+      if( left < right )
+	{
+	  temp = arr[left];
+	  arr[left] = arr[right];
+	  arr[right] = temp;
+	}
+      //left += 1;
+      //right -= 1;
+    }
+
+  if(arr[low] > arr[left])
+    {
+      temp = arr[left];
+      arr[left] = arr[low];
+      arr[low] = temp;
+      sorthelper(arr, low, left-1);
+      sorthelper(arr, left+1, high);
+    }
+  else
+    sorthelper(arr, low+1, high);
+  */
 }
 
 /**
