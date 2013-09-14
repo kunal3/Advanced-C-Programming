@@ -169,44 +169,6 @@ void sorthelper(int * arr, int low, int high)
       sorthelper(arr, low, right-1);
       sorthelper(arr, right+1, high);
     }
-
-
-
-  /*
-  if (left >= right)
-    return;
-
-  left++;
-
-  while( left < right )
-    {
-      while(arr[left] <= pivot && left < right)
-	left +=1;
-
-      while(arr[right] >= pivot && left < right)
-	right -= 1;
-
-      if( left < right )
-	{
-	  temp = arr[left];
-	  arr[left] = arr[right];
-	  arr[right] = temp;
-	}
-      //left += 1;
-      //right -= 1;
-    }
-
-  if(arr[low] > arr[left])
-    {
-      temp = arr[left];
-      arr[left] = arr[low];
-      arr[low] = temp;
-      sorthelper(arr, low, left-1);
-      sorthelper(arr, left+1, high);
-    }
-  else
-    sorthelper(arr, low+1, high);
-  */
 }
 
 /**
@@ -255,6 +217,46 @@ void sorthelper(int * arr, int low, int high)
  */
 int search(int * arr, int length, int key)
 {
-    return -1;
+  return searchhelper(arr, 0, length, key);
+  /*
+  if(arr[length/2] == key)
+    return length/2;
+  else
+    {
+      if(arr[length/2]>key)
+	return searchhelper(arr, 0, (length/2)-1, key);
+      else
+	return searchhelper(arr, (length/2)+1, length, key);
+    }
+  return -1;
+  */
 }
 
+int searchhelper(int * arr, int low, int high, int key)
+{
+  if(low == 0)
+    {
+      if(arr[high/2] == key)
+	return high/2;
+      else
+	{
+	  if(arr[high/2 > key])
+	    return searchhelper(arr, 0, high/2, key);
+	  else
+	    return searchhelper(arr, high/2, high, key);
+	}
+    }
+  else
+    {
+      if(arr[low+(high-low)/2 == key])
+	return low+(high-low)/2;
+      else
+	{
+	  if(arr[low+(high-low)/2] > key)
+	    return searchhelper(arr, low, low+(high-low)/2, key);
+	  else
+	    return searchhelper(arr, low+(high-low)/2, high, key);
+	}
+    }
+  return -1;
+}
