@@ -152,7 +152,9 @@ void sorthelper(int * arr, int low, int high)
   // declaring variables
   int left = low;
   int right = high;
-  int pivot = arr[low];
+  int pivot = arr[0]; 
+  if(low>-1)
+    pivot = arr[low];
   int temp = 0;
   
   // end condition - if low >= high
@@ -240,33 +242,40 @@ int search(int * arr, int length, int key)
 
 int searchhelper(int * arr, int low, int high, int key)
 {
-  // 
-  if(key > arr[high-1])
+  // exits if the key is not in the array
+  if(key > arr[high-1] || key < arr[0])
     return -1;
 
+  // if the key is in the beginning half of the array
   if(low == 0)
     {
+      // recursion terminating statement
       if(arr[high/2] == key)
 	return high/2;
       else
 	{
+	  // recursive calls based on the location of the key
 	  if(arr[high/2] > key)
 	    return searchhelper(arr, 0, high/2, key);
 	  else
 	    return searchhelper(arr, high/2, high, key);
 	}
     }
+  // if the key is in the second half of the array
   else
     {
+      // recursion terminating statement
       if(arr[low+(high-low)/2] == key)
 	return low+(high-low)/2;
       else
 	{
+	  // recursive calls based on the location of the key
 	  if(arr[low+(high-low)/2] > key)
 	    return searchhelper(arr, low, low+(high-low)/2, key);
 	  else
 	    return searchhelper(arr, low+(high-low)/2, high, key);
 	}
     }
+  // returns -1 if it doesn't find the key
   return -1;
 }
