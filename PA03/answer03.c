@@ -62,32 +62,39 @@
 
 int * readIntegers(const char * filename, int * numberOfIntegers)
 {
+  // initializing variables
   int temp = 0;
   int size = 0;
   int counter = 0;
 
+  // initializing and opening file
   FILE * fp;
   fp = fopen(filename,"r");
 
   if (fp==NULL)
     return NULL;
-
+  
+  // counts the number of integers in the file
   while(fscanf(fp, "%d", &temp)==1)
     size++;
-
+  
   *numberOfIntegers = size;
-
+ 
+  // resetting the file pointer to the beginning
   fseek (fp, 0, SEEK_SET);
 
+  // creating the array and allocating memory
   int * arr;
   arr = malloc (sizeof(int) * size);
 
+  // putting values from file into the array
   while (fscanf(fp, "%d", &temp)==1)
     {
       arr[counter] = temp;
       counter++;
     }
 
+  // close the file and return filled array
   fclose(fp);
   return arr;
 }
@@ -130,6 +137,7 @@ int * readIntegers(const char * filename, int * numberOfIntegers)
  *
  */
 
+// declaring sorthelper
 void sorthelper(int *,int,int);
 
 void sort(int * arr, int length)
@@ -137,24 +145,31 @@ void sort(int * arr, int length)
   if(length <= 1)
     return;
   sorthelper(arr, 0, length-1);
-
 }
 
 void sorthelper(int * arr, int low, int high)
 {
+  // declaring variables
   int left = low;
   int right = high;
   int pivot = arr[low];
   int temp = 0;
-
+  
+  // end condition - if low >= high
   if(low<high)
     {
       while (left<right)
 	{
+	  // keeps increasing left if it is less than pivot
 	  while(arr[left]<=pivot && left<high)
 	    left++;
+
+	  // keeps decreasing right if it is more than pivot
 	  while(arr[right]>pivot)
 	    right--;
+
+	  // once it is done increasing and decreasing left and right
+	  // we swap the values at left and right
 	  if(left<right)
 	    {
 	      temp=arr[left];
@@ -163,9 +178,12 @@ void sorthelper(int * arr, int low, int high)
 	    }
 	}
 
+      // swapping arr[low] with arr[right]
       temp = pivot;
       arr[low]=arr[right];
       arr[right]=pivot;
+
+      // recursive calls to sorthelper with new array bounds
       sorthelper(arr, low, right-1);
       sorthelper(arr, right+1, high);
     }
@@ -218,29 +236,21 @@ void sorthelper(int * arr, int low, int high)
 int search(int * arr, int length, int key)
 {
   return searchhelper(arr, 0, length, key);
-  /*
-  if(arr[length/2] == key)
-    return length/2;
-  else
-    {
-      if(arr[length/2]>key)
-	return searchhelper(arr, 0, (length/2)-1, key);
-      else
-	return searchhelper(arr, (length/2)+1, length, key);
-    }
-  return -1;
-  */
 }
 
 int searchhelper(int * arr, int low, int high, int key)
 {
+  // 
+  if(key > arr[high-1])
+    return -1;
+
   if(low == 0)
     {
       if(arr[high/2] == key)
 	return high/2;
       else
 	{
-	  if(arr[high/2 > key])
+	  if(arr[high/2] > key)
 	    return searchhelper(arr, 0, high/2, key);
 	  else
 	    return searchhelper(arr, high/2, high, key);
@@ -248,7 +258,7 @@ int searchhelper(int * arr, int low, int high, int key)
     }
   else
     {
-      if(arr[low+(high-low)/2 == key])
+      if(arr[low+(high-low)/2] == key)
 	return low+(high-low)/2;
       else
 	{
