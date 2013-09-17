@@ -1,19 +1,9 @@
-input file format:
-<method> <value to partition>
 
-methods:
+
+= 11 + 2
+= 13
 1. All
-2. Increasing
-3. Decreasing
-4. Odd
-5. Even
-6. OddAndEven
-7. Prime
-
-current method: 7
-current value: 13
-Start Partitioning...
-partitionPrime 13
+= 2 + 11
 = 2 + 2 + 2 + 2 + 2 + 3
 = 2 + 2 + 2 + 2 + 3 + 2
 = 2 + 2 + 2 + 2 + 5
@@ -33,7 +23,7 @@ partitionPrime 13
 = 2 + 5 + 2 + 2 + 2
 = 2 + 5 + 3 + 3
 = 2 + 7 + 2 + 2
-= 2 + 11
+2. Increasing
 = 3 + 2 + 2 + 2 + 2 + 2
 = 3 + 2 + 2 + 3 + 3
 = 3 + 2 + 3 + 2 + 3
@@ -50,13 +40,23 @@ partitionPrime 13
 = 3 + 5 + 3 + 2
 = 3 + 5 + 5
 = 3 + 7 + 3
+3. Decreasing
+4. Odd
 = 5 + 2 + 2 + 2 + 2
 = 5 + 2 + 3 + 3
 = 5 + 3 + 2 + 3
 = 5 + 3 + 3 + 2
 = 5 + 3 + 5
 = 5 + 5 + 3
+5. Even
+6. OddAndEven
 = 7 + 2 + 2 + 2
 = 7 + 3 + 3
-= 11 + 2
-= 13
+7. Prime
+current method: 7
+current value: 13
+input file format:
+methods:
+<method> <value to partition>
+partitionPrime 13
+Start Partitioning...

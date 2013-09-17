@@ -62,13 +62,11 @@ ${TESTS}: test%: $(TARGET) | environment
 	@echo "test$*"
 	@echo '***************************************'
 	./$(TARGET) inputs/input0$* > outputs/output$*
-	diff expected/output$* outputs/output$*
+	cat outputs/output$* | sort | diff expected/output-sorted$* -
 	$(VALGRIND) --log-file=outputs/memoutput$* ./$(TARGET) inputs/input0$* > /dev/null
 	@echo
 	@bin/valgrind-checker.sh outputs/memoutput$*
 	@echo 
-
-
 
 testz01: $(TARGET) | environment
 	./$(TARGET) inputs/input01 > outputs/output1
