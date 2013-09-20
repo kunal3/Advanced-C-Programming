@@ -351,10 +351,10 @@ void partPrime(int * arr, int pos, int val)
 
 int isPrime(int val)
 {
-  if(val > 2 && val%2==0)
+  if(val==1 || (val > 2 && val%2==0))
     return 0;
 
-  int max = sqrt(val);
+  int max = val/2;
   int i;
   for(i=3; i< max; i+=2)
     if(val%i==0)
