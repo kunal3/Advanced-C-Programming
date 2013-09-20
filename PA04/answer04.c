@@ -30,25 +30,31 @@
  * = 3
  */
 
+// declaring partAll and printArr
 void partAll(int*, int, int);
 void printArr(int*, int);
-
 
 void partitionAll(int value)
 {
   printf("partitionAll %d\n", value);
+
+  // creating arr and allocating memory
   int * arr = malloc(value * sizeof(int));
   partAll(arr, 0, value);
-  free(arr);
+  free(arr); // freeing arr 
 }
 
+// all partition helper
 void partAll(int * arr, int pos, int val)
 {
+  // if val reaches 0 or less, print from 0 to pos
   if(val <= 0)
     {
       printArr(arr, pos);
       return;
     }
+
+  // partitions all values
   int i;
   for(i=1; i<=val ; ++i)
     {
@@ -57,6 +63,7 @@ void partAll(int * arr, int pos, int val)
     }
 }
 
+// prints arr from 0 to pos
 void printArr(int * arr, int pos)
 {
   int i;
@@ -87,18 +94,23 @@ void printArr(int * arr, int pos)
  *
  */
 
+// declaring partInc
 void partInc(int*,int,int);
-  
+
 void partitionIncreasing(int value)
 {
   printf("partitionIncreasing %d\n", value);
+
+  // declaring arr and allocating memory
   int * arr = malloc(value * sizeof(int));
   partInc(arr, 0, value);
-  free(arr);
+  free(arr);   // freeing arr's memory
 }
 
+// increasing partitions helper and recursive function
 void partInc(int * arr, int pos, int val)
 {
+  // if val reaches 0 or less, print from 0 to pos
   if(val <= 0)
     {
       printArr(arr, pos);
@@ -107,6 +119,8 @@ void partInc(int * arr, int pos, int val)
   int i;
   for(i=1; i<=val ; ++i)
     {
+      // only creates partitions if its the first position
+      // or i is greater than the last number in arr
       if(pos==0 || (pos>0 && i>arr[pos-1]))
 	{
 	  arr[pos]=i;
@@ -134,14 +148,17 @@ void partInc(int * arr, int pos, int val)
  *
  */
 
+// declaring partDecreasing
 void partDec(int*,int,int);
 
 void partitionDecreasing(int value)
 {
   printf("partitionDecreasing %d\n", value);
+
+  // creating arr and allocating memory
   int * arr = malloc(value * sizeof(int));
   partDec(arr, 0, value);
-  free(arr);
+  free(arr);   // free arr's allocated memory
 }
 
 void partDec(int * arr, int pos, int val)
@@ -154,6 +171,8 @@ void partDec(int * arr, int pos, int val)
   int i;
   for(i=1; i<=val ; ++i)
     {
+      // creates a partition if pos is 0 or 
+      // if i is lesser than the last number in arr
       if(pos==0 || (pos>0 && i<arr[pos-1]))
 	{
 	  arr[pos]=i;
@@ -179,14 +198,17 @@ void partDec(int * arr, int pos, int val)
  * generates invalid partitions and checks validity before printing.
  */
 
+// declaring partOdd
 void partOdd(int*, int, int);
 
 void partitionOdd(int value)
 {
   printf("partitionOdd %d\n", value);
+
+  // allocating arr's memory
   int * arr = malloc(value * sizeof(int));
   partOdd(arr, 0, value);
-  free(arr);
+  free(arr);  // freeing arr's space
 }
 
 void partOdd(int * arr, int pos, int val)
@@ -199,6 +221,7 @@ void partOdd(int * arr, int pos, int val)
   int i;
   for(i=1; i<=val ; ++i)
     {
+      // creates partition only if i is odd
       if(i%2!=0)
 	{
 	  arr[pos]=i;
@@ -227,14 +250,17 @@ void partOdd(int * arr, int pos, int val)
  * generates invalid partitions and checks validity before printing.
  */
 
+// declaring partEven
 void partEven(int*, int, int);
 
 void partitionEven(int value)
 {
   printf("partitionEven %d\n", value);
+  
+  // creating arr and allocating space
   int * arr = malloc(value * sizeof(int));
   partEven(arr, 0, value);
-  free(arr);
+  free(arr);   // freeing arr
 }
 
 void partEven(int * arr, int pos, int val)
@@ -247,6 +273,7 @@ void partEven(int * arr, int pos, int val)
   int i;
   for(i=1; i<=val ; ++i)
     {
+      // creates a partition only if i is even
       if(i%2==0)
 	{
 	  arr[pos]=i;
@@ -275,14 +302,17 @@ void partEven(int * arr, int pos, int val)
  * generates invalid partitions and checks validity before printing.
  */
 
+// declaring partOddAndEven
 void partOddAndEven(int*, int, int);
 
 void partitionOddAndEven(int value)
 {
   printf("partitionOddAndEven %d\n", value);
+
+  // allocating memory for arr
   int * arr = malloc(value * sizeof(int));
   partOddAndEven(arr, 0, value);
-  free(arr);
+  free(arr);   // freeing arr
 }
 
 void partOddAndEven(int * arr, int pos, int val)
@@ -295,6 +325,9 @@ void partOddAndEven(int * arr, int pos, int val)
   int i;
   for(i=1; i<=val ; ++i)
     {
+      // only creates a partition if the 
+      // position is even and i is odd
+      // or position is odd and i is even
       if((pos%2 == 0 && i%2 != 0) || (pos%2!=0 && i%2==0))
 	{
 	  arr[pos]=i;
@@ -320,15 +353,18 @@ void partOddAndEven(int * arr, int pos, int val)
  * generates invalid partitions and checks validity before printing.
  */
 
+// declaring partPrime and isPrime
 void partPrime(int*,int,int);
 int isPrime(int);
   
 void partitionPrime(int value)
 {
   printf("partitionPrime %d\n", value);
+
+  // creating arr and allocating space
   int * arr = malloc(value * sizeof(int));
   partPrime(arr, 0, value);
-  free(arr);
+  free(arr);    // freeing arr's space
 }
 
 void partPrime(int * arr, int pos, int val)
@@ -341,6 +377,7 @@ void partPrime(int * arr, int pos, int val)
   int i;
   for(i=1; i<=val ; ++i)
     {
+      // creates a partition of i is prime using isPrime function
       if(isPrime(i))
 	{
 	  arr[pos]=i;
@@ -349,16 +386,20 @@ void partPrime(int * arr, int pos, int val)
     }
 }
 
+// function for checking if the number is prime
 int isPrime(int val)
 {
+  // if the number is 1 or divisible by 2, its not prime
   if(val==1 || (val > 2 && val%2==0))
     return 0;
 
   int max = val/2;
   int i;
+  // checks numbers over 3 by dividing it by odd numbers
   for(i=3; i< max; i+=2)
     if(val%i==0)
       return 0;
 
+  // if it is not divisible by anything but itself, return 1 = true
   return 1;
 }
