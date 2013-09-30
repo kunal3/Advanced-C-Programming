@@ -172,7 +172,7 @@ char * * readString(char * filename, int * numString)
   FILE * fptr = fopen(filename, "r");
   if (fptr==NULL)
     return NULL;
-  
+
   char buffer[MAXIMUM_LENGTH];
 
   while(fgets(buffer, MAXIMUM_LENGTH, fptr)!=NULL)
@@ -303,6 +303,7 @@ int saveString(char * filename, char * * arrString, int numString)
   for(i = 0; i < numString; i++)
     if(fprintf(fp, "%s\n", arrString[i])<0)
       return 0;
+
   fclose(fp);
   return 1;
 }
@@ -343,7 +344,7 @@ int compstr(const void *p1, const void *p2)
 
 void sortString(char * * arrString, int numString)
 {
-  qsort(arrString, numString, sizeof(char*), compstr));
+  qsort(arrString, numString, sizeof(char*), compstr);
 }
 
 
