@@ -78,7 +78,7 @@ int * readInteger(char * filename, int * numInteger)
   while(fscanf(fp,"%d", &temp)==1)
     size++;
 
-  *numIntegers = size;
+  *numInteger = size;
   
   // resetting the file pointer to the beginning
   fseek (fp, 0, SEEK_SET);
@@ -167,7 +167,29 @@ int * readInteger(char * filename, int * numInteger)
 
 char * * readString(char * filename, int * numString)
 {
+  int ind = 0;
+
+  FILE * fptr = fopen(filename, 'r');
+  if (fptr==NULL)
     return NULL;
+  
+  char buffer[MAXIMUM_LENGTH];
+
+  while(fgets(buffer, MAXIMUM_LENGTH, fptr)!=NULL)
+    *numString++;
+
+  char ** strArr = malloc(sizeof(char*) * *numString);
+
+  fseek(fptr,0,SEEK_SET);
+
+  while(fgets(buffer, MAXIMUM_LENGTH, fptr) != NULL)
+    {
+      strArr[ind]=malloc(sizeof(char) * (strlen(buffer)+1));
+      strArr[ind]=malloc(sizeof(char) * MAXIMUM_LENGTH);
+      strcpy(strArr[ind], buffer);
+      ind++;
+    }
+  return strArr;
 }
 
 /* ----------------------------------------------- */
@@ -176,6 +198,9 @@ char * * readString(char * filename, int * numString)
  */
 void printInteger(int * arrInteger, int numInteger)
 {
+  int i=0;
+  for(i=0;i<numInteger;i++)
+    printf("%d \n",arrInteger[i]);
 }
 
 /* ----------------------------------------------- */
@@ -186,6 +211,14 @@ void printInteger(int * arrInteger, int numInteger)
  */
 void printString(char * * arrString, int numString)
 {
+  int i = 0;
+  for(i=0;i<numString;i++)
+    {
+      printf("%s",arrString[i]);
+      int len = strlen(arrString[i]);
+      if(len == 0 || arrString[i][len-1]!='\n')
+	printf("\n");
+    }
 }
 
 /* ----------------------------------------------- */
