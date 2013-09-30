@@ -178,7 +178,8 @@ char * * readString(char * filename, int * numString)
   while(fgets(buffer, MAXIMUM_LENGTH, fptr)!=NULL)
     (*numString)++;
 
-  char ** strArr = malloc(sizeof(char*) * *numString);
+  char ** strArr;
+  strArr = malloc(sizeof(char*) * *numString);
 
   fseek(fptr,0,SEEK_SET);
 
@@ -241,7 +242,6 @@ void freeString(char * * arrString, int numString)
   int i = 0;
   for(i = 0; i < numString; i++)
     free(arrString[i]);
-
   free(arrString);
 }
 
@@ -317,15 +317,12 @@ int saveString(char * filename, char * * arrString, int numString)
 
 int compint(const void *p1, const void *p2)
 {
-  return (*(int*)a - *(int*)b);
+  return (*(int*)p1 - *(int*)p2);
 }
 
 void sortInteger(int * arrInteger, int numInteger)
 {
-  int i = 0;
-  for(i = 0; i < numInteger-1; i++)
-    qsort(arrInteger, numInteger, sizeof(int), compint(arrInteger[i],arrInteger[i+1]));
-  free(arrInteger);
+  qsort(arrInteger, numInteger, sizeof(int), compint);
 }
 
 
@@ -341,22 +338,12 @@ void sortInteger(int * arrInteger, int numInteger)
 
 int compstr(const void *p1, const void *p2)
 {
-
-  return strcmp(*((char**)a), *((char**)b));
-  //string * strp1 = (string *) p1;
-  //char * * strp1 = (char * *) p1;
-  //char * str = * strp1;
+  return strcmp(*((char**)p1), *((char**)p2));
 }
 
 void sortString(char * * arrString, int numString)
 {
-  int i = 0;
-  for(i = 0; i < numString - 1; i++)
-    qsort(arrString, numString, sizeof(char*), compstr(arrString[i],arrString[i+1]));
-
-  for(ind = 0; ind < numString; ind++)
-    free(arrString[ind]);
-  free(arrString);
+  qsort(arrString, numString, sizeof(char*), compstr));
 }
 
 
