@@ -167,31 +167,38 @@ int * readInteger(char * filename, int * numInteger)
 
 char * * readString(char * filename, int * numString)
 {
+  // declaring variables
   int ind = 0;
   int numLine = 0;
 
+  // opening file
   FILE * fptr = fopen(filename, "r");
   if (fptr==NULL)
     return NULL;
 
   char buffer[MAXIMUM_LENGTH];
 
+  // counting number of lines of strings in array
   while(fgets(buffer, MAXIMUM_LENGTH, fptr)!=NULL)
     numLine++;
 
   *numString = numLine;
 
+  // creating array for each line in filename
   char ** strArr;
   strArr = malloc(sizeof(char*) * numLine);
 
   fseek(fptr,0,SEEK_SET);
 
+  // storing strings in array
   while(fgets(buffer, MAXIMUM_LENGTH, fptr) != NULL)
     {
       strArr[ind]=malloc(sizeof(char) * (strlen(buffer)+1));
       strcpy(strArr[ind], buffer);
       ind++;
     }
+
+  // closing the file and returning array
   fclose(fptr);
   return strArr;
 }
@@ -220,6 +227,8 @@ void printString(char * * arrString, int numString)
   for(i = 0; i < numString; i++)
     {
       printf("%s",arrString[i]);
+      // small check to see if the string already has a \n
+      // if not, this adds one
       int len = strlen(arrString[i]);
       if(len == 0 || arrString[i][len-1]!='\n')
 	{
@@ -271,12 +280,17 @@ void freeString(char * * arrString, int numString)
 
 int saveInteger(char * filename, int * arrInteger, int numInteger)
 {
+  // open file in write mode
   FILE * fp = fopen(filename, "w");
   if (fp==NULL)
     return 0;
+
+  // writing data to file using fprintf
   int i = 0;
   for (i = 0; i < numInteger; i++)
     (fprintf(fp, "%d\n", arrInteger[i]));
+  
+  // close the file and return that everything went well
   fclose(fp);
   return 1;
 }
@@ -301,10 +315,14 @@ int saveInteger(char * filename, int * arrInteger, int numInteger)
 
 int saveString(char * filename, char * * arrString, int numString)
 {
+  // opening file in write mode
   FILE * fp = fopen(filename, "w");
   if(fp == NULL)
     return 0;
   int i = 0;
+
+  // writing string to file and adding \n at the end if it doesnt 
+  // have one already 
   for(i = 0; i < numString; i++)
     {
       fprintf(fp, "%s", arrString[i]);
@@ -312,6 +330,8 @@ int saveString(char * filename, char * * arrString, int numString)
       if(len == 0 || arrString[i][len-1]!='\n')
       	fprintf(fp,"\n");
     }
+
+  // closing file and returning that everything went well
   fclose(fp);
   return 1;
 }
@@ -326,6 +346,10 @@ int saveString(char * filename, char * * arrString, int numString)
 
 int compint(const void *p1, const void *p2)
 {
+  // subtracts p2 from p1
+  // if p1 is greater, answer is positive
+  // if p2 is greater, answer is negative
+  // if they are equal, answer is 0
   return (*(int*)p1 - *(int*)p2);
 }
 
@@ -347,11 +371,12 @@ void sortInteger(int * arrInteger, int numInteger)
 
 int compstr(const void *p1, const void *p2)
 {
+  // stores the addresses of p1 and p2 in ptr1 and ptr2
   char * *ptr1 = (char * *)p1;
   char * *ptr2 = (char * *)p2;
 
+  // string compare does the work for us
   return strcmp(*ptr1, *ptr2);
-  //return strcmp(*((char**)p1), *((char**)p2));
 }
 
 void sortString(char * * arrString, int numString)
