@@ -168,6 +168,7 @@ int * readInteger(char * filename, int * numInteger)
 char * * readString(char * filename, int * numString)
 {
   int ind = 0;
+  int numLine = 0;
 
   FILE * fptr = fopen(filename, "r");
   if (fptr==NULL)
@@ -176,10 +177,12 @@ char * * readString(char * filename, int * numString)
   char buffer[MAXIMUM_LENGTH];
 
   while(fgets(buffer, MAXIMUM_LENGTH, fptr)!=NULL)
-    (*numString)++;
+    numLine++;
+
+  *numString = numLine;
 
   char ** strArr;
-  strArr = malloc(sizeof(char*) * *numString);
+  strArr = malloc(sizeof(char*) * numLine);
 
   fseek(fptr,0,SEEK_SET);
 
@@ -210,6 +213,7 @@ void printInteger(int * arrInteger, int numInteger)
  *
  * Hint: printf("%s" ... can print a string
  */
+
 void printString(char * * arrString, int numString)
 {
   int i = 0;
@@ -218,7 +222,9 @@ void printString(char * * arrString, int numString)
       printf("%s",arrString[i]);
       int len = strlen(arrString[i]);
       if(len == 0 || arrString[i][len-1]!='\n')
-	printf("\n");
+	{
+      	printf("\n");
+	}
     }
 }
 
@@ -270,8 +276,7 @@ int saveInteger(char * filename, int * arrInteger, int numInteger)
     return 0;
   int i = 0;
   for (i = 0; i < numInteger; i++)
-    if(fprintf(fp, "%d\n", arrInteger[i])<0)
-      return 0;
+    (fprintf(fp, "%d\n", arrInteger[i]));
   fclose(fp);
   return 1;
 }
@@ -301,9 +306,12 @@ int saveString(char * filename, char * * arrString, int numString)
     return 0;
   int i = 0;
   for(i = 0; i < numString; i++)
-    if(fprintf(fp, "%s\n", arrString[i])<0)
-      return 0;
-
+    {
+      fprintf(fp, "%s", arrString[i]);
+      int len = strlen(arrString[i]);
+      if(len == 0 || arrString[i][len-1]!='\n')
+      	fprintf(fp,"\n");
+    }
   fclose(fp);
   return 1;
 }
@@ -339,12 +347,16 @@ void sortInteger(int * arrInteger, int numInteger)
 
 int compstr(const void *p1, const void *p2)
 {
-  return strcmp(*((char**)p1), *((char**)p2));
+  char * *ptr1 = (char * *)p1;
+  char * *ptr2 = (char * *)p2;
+
+  return strcmp(*ptr1, *ptr2);
+  //return strcmp(*((char**)p1), *((char**)p2));
 }
 
 void sortString(char * * arrString, int numString)
 {
-  qsort(arrString, numString, sizeof(char*), compstr);
+  qsort(arrString, numString, sizeof(char *), compstr);
 }
 
 
