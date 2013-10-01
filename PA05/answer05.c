@@ -302,7 +302,7 @@ int saveInteger(char * filename, int * arrInteger, int numInteger)
 int saveString(char * filename, char * * arrString, int numString)
 {
   FILE * fp = fopen(filename, "w");
-  if(fp = NULL)
+  if(fp == NULL)
     return 0;
   int i = 0;
   for(i = 0; i < numString; i++)
