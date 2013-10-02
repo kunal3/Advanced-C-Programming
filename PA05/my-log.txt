@@ -1,0 +1,442 @@
+commit f9bb4743c6f5198036ec372b726f50c6c0dfdab6
+Author: Kunal Agrawal <kagrawa@ecelinux02.ecn.purdue.edu>
+Date:   Mon Sep 30 20:37:19 2013 -0400
+
+    almost.
+
+commit 15d57e546294e48a10d0bab9a6023fdf37907b23
+Author: Kunal Agrawal <kagrawa@ecelinux02.ecn.purdue.edu>
+Date:   Mon Sep 30 19:36:17 2013 -0400
+
+    1 error.
+
+commit 41c61f75509611d60935e47d54db15a7ebc2adf0
+Author: Kunal Agrawal <kagrawa@ecelinux02.ecn.purdue.edu>
+Date:   Mon Sep 30 19:13:54 2013 -0400
+
+    SO CLOSE
+
+commit 6217133fd6544e999612de445ef4d7f568de5f1e
+Author: Kunal Agrawal <kagrawa@ecelinux02.ecn.purdue.edu>
+Date:   Mon Sep 30 18:30:54 2013 -0400
+
+    i think I'm dine
+
+commit b2ee7535fbdf28fcd72847424d64cd29d5e32ca5
+Author: Kunal Agrawal <kagrawa@ecelinux02.ecn.purdue.edu>
+Date:   Mon Sep 30 17:54:06 2013 -0400
+
+    func 5 and 6
+
+commit f3dbcf78702aef2b4331654ac6af3b55f49f38d0
+Author: Kunal Agrawal <kagrawa@ecelinux02.ecn.purdue.edu>
+Date:   Mon Sep 30 17:12:51 2013 -0400
+
+    done first 4
+
+commit af7bac467e31e5a4793efa8933aeabe9f1e4ff50
+Author: Kunal Agrawal <kagrawa@ecelinux02.ecn.purdue.edu>
+Date:   Mon Sep 30 16:40:33 2013 -0400
+
+    updated max length
+
+commit 14bb7a8235a3b335734120e9e2570e60348c48ca
+Author: Kunal Agrawal <kagrawa@ecelinux02.ecn.purdue.edu>
+Date:   Mon Sep 30 16:24:36 2013 -0400
+
+    done first function
+
+commit d4f4d483320897c9ab146b848f5002b6c22a163d
+Author: Kunal Agrawal <kagrawa@ecelinux02.ecn.purdue.edu>
+Date:   Mon Sep 30 16:16:00 2013 -0400
+
+    final PA05
+
+commit eed19027cd01dbc37b88ee39293faa2c5f6ad2be
+Author: Kunal Agrawal <kagrawa@ecelinux13.ecn.purdue.edu>
+Date:   Thu Sep 26 20:36:57 2013 -0400
+
+    add PA05
+
+commit 4f44e9fd498dd434e4847a676bd5daa6160c59c2
+Author: Kunal Agrawal <kagrawa@ecelinux11.ecn.purdue.edu>
+Date:   Fri Sep 20 18:43:49 2013 -0400
+
+    adding zip
+
+commit 12eb77e22f8674498fcd52cc2bbd9d1da139aa4c
+Author: Kunal Agrawal <kagrawa@ecelinux11.ecn.purdue.edu>
+Date:   Fri Sep 20 18:39:58 2013 -0400
+
+    commented pa04
+
+commit 2c6839535f4814edf4d2006b119fc514d0d4f9fd
+Author: Kunal Agrawal <kagrawa@ecelinux11.ecn.purdue.edu>
+Date:   Fri Sep 20 17:58:26 2013 -0400
+
+    done Pa04
+
+commit 24ca5d33cd65318da7f134596a0e1a79eaa944d1
+Author: Kunal Agrawal <kagrawa@ecelinux11.ecn.purdue.edu>
+Date:   Fri Sep 20 17:40:24 2013 -0400
+
+    almost done Pa04
+
+commit fc3ba40411daa323624816f5cff7f9ccc4b6dd26
+Author: Kunal Agrawal <kagrawa@ecelinux29.ecn.purdue.edu>
+Date:   Thu Sep 19 21:39:57 2013 -0400
+
+    4th assign
+
+commit 06e5ad6c673934ea29e61db7090286410b9aaea5
+Author: Kunal Agrawal <kagrawa@ecelinux29.ecn.purdue.edu>
+Date:   Mon Sep 16 21:08:27 2013 -0400
+
+    PA04
+
+commit 505a3184f5a99b685ddef35a2f9eeb118b869353
+Author: Kunal Agrawal <kagrawa@ecelinux29.ecn.purdue.edu>
+Date:   Fri Sep 13 23:18:32 2013 -0400
+
+    done
+
+commit 8aef66e956700a4386946915c1517e9a11afba1b
+Author: Kunal Agrawal <kagrawa@ecelinux29.ecn.purdue.edu>
+Date:   Fri Sep 13 23:08:07 2013 -0400
+
+    commenting
+
+commit d5ec106e2a8368abb5de4513c23f29f76e1bb21c
+Author: Kunal Agrawal <kagrawa@ecelinux29.ecn.purdue.edu>
+Date:   Fri Sep 13 21:28:35 2013 -0400
+
+    binarysearch first attempt
+
+commit 5b2cc42959b1cc76c15265b4bca89c05dff29985
+Author: Kunal Agrawal <kagrawa@ecelinux28.ecn.purdue.edu>
+Date:   Fri Sep 13 19:44:02 2013 -0400
+
+    done quicksort
+
+commit 5a5d2772b1b24eeedbc89c9d3365da214651d15b
+Author: Kunal Agrawal <kagrawa@ecelinux28.ecn.purdue.edu>
+Date:   Fri Sep 13 17:45:55 2013 -0400
+
+    quicksort try
+
+commit e0183829898117fb6c677156617cd2413c9cf47f
+Author: Kunal Agrawal <kagrawa@ecelinux25.ecn.purdue.edu>
+Date:   Tue Sep 10 11:51:37 2013 -0400
+
+    working on 1
+
+commit ea039638c2dcd1a0afe62f3d1fce7c392bc79c1b
+Author: Kunal Agrawal <kagrawa@ecelinux25.ecn.purdue.edu>
+Date:   Tue Sep 10 11:13:22 2013 -0400
+
+    1st almost done
+
+commit 0be8fb2ef18e647b6eaf0f4e8274e0586b6ff435
+Author: Kunal Agrawal <kagrawa@ecelinux25.ecn.purdue.edu>
+Date:   Tue Sep 10 10:47:02 2013 -0400
+
+    new PA04
+
+commit e9fb5267b9fd77caf81d44edf6622246e5256174
+Author: Kunal Agrawal <kagrawa@ecelinux05.ecn.purdue.edu>
+Date:   Thu Sep 5 19:52:28 2013 -0400
+
+    Assgn 3
+
+commit 1863a0b4950eb15e97ba346c1dea2d2e1a911636
+Author: Kunal Agrawal <kagrawa@ecelinux28.ecn.purdue.edu>
+Date:   Mon Sep 2 23:21:14 2013 -0400
+
+    done
+
+commit baca9644aae96f53f32f5acaa3f480c9236d2c18
+Author: Kunal Agrawal <kagrawa@ecelinux28.ecn.purdue.edu>
+Date:   Mon Sep 2 21:56:31 2013 -0400
+
+    so close
+
+commit 1ce0bdb3735d71f94fe52a174fcf4ced1115c0ac
+Author: Kunal Agrawal <kagrawa@ecelinux28.ecn.purdue.edu>
+Date:   Mon Sep 2 20:58:26 2013 -0400
+
+    2
+
+commit dbcdd6b85b054b4d5b71366e15f1c9aaf2b8bc42
+Author: Kunal Agrawal <kagrawa@ecelinux28.ecn.purdue.edu>
+Date:   Mon Sep 2 20:25:38 2013 -0400
+
+    made priv
+
+commit 7d3601be832f2a1bb64a2834ff1067483d06ccd1
+Author: Kunal Agrawal <kagrawa@ecelinux28.ecn.purdue.edu>
+Date:   Mon Sep 2 19:25:42 2013 -0400
+
+    almost don
+
+commit fe6069c1c5fd337268082ba0c2438487040e5cef
+Author: Kunal Agrawal <kagrawa@ecelinux13.ecn.purdue.edu>
+Date:   Mon Sep 2 16:01:35 2013 -0400
+
+    5/7 done
+
+commit 725922c38a75f5bac47884f488db23e84fa9a48a
+Author: Kunal Agrawal <kagrawa@ecelinux13.ecn.purdue.edu>
+Date:   Mon Sep 2 15:44:15 2013 -0400
+
+    half done
+
+commit f1f67000edf287f968de53f35ea15ae87bf40546
+Author: Kunal Agrawal <kagrawa@ecelinux13.ecn.purdue.edu>
+Date:   Mon Sep 2 15:14:18 2013 -0400
+
+    PA02
+
+commit 7925aa07125c2bddfb9bb7cfe9f5d7f3536ba649
+Author: Kunal Agrawal <kagrawa@ecelinux09.ecn.purdue.edu>
+Date:   Tue Aug 27 11:42:32 2013 -0400
+
+    first attempt
+
+commit f95768341c4ab1b1caaf7fa85a9eb98037fa370e
+Author: Kunal Agrawal <kagrawa@ecelinux13.ecn.purdue.edu>
+Date:   Tue Aug 27 01:39:37 2013 -0400
+
+    start homework
+
+commit 6bc166feaaf182f66c0075073c8589bbbd8d090d
+Author: kunal3 <kagrawa@purdue.edu>
+Date:   Mon Aug 26 22:35:57 2013 -0700
+
+    Initial commit
+commit b2caa0e111bc926783a294eda7b71f777b767f00
+Author: Kunal Agrawal <kagrawa@ecelinux02.ecn.purdue.edu>
+Date:   Mon Sep 30 20:53:29 2013 -0400
+
+    commented
+
+commit 08b73684838d8bed6a623da2d2d204b14066e50c
+Author: Kunal Agrawal <kagrawa@ecelinux02.ecn.purdue.edu>
+Date:   Mon Sep 30 20:42:40 2013 -0400
+
+    DONE
+
+commit f9bb4743c6f5198036ec372b726f50c6c0dfdab6
+Author: Kunal Agrawal <kagrawa@ecelinux02.ecn.purdue.edu>
+Date:   Mon Sep 30 20:37:19 2013 -0400
+
+    almost.
+
+commit 15d57e546294e48a10d0bab9a6023fdf37907b23
+Author: Kunal Agrawal <kagrawa@ecelinux02.ecn.purdue.edu>
+Date:   Mon Sep 30 19:36:17 2013 -0400
+
+    1 error.
+
+commit 41c61f75509611d60935e47d54db15a7ebc2adf0
+Author: Kunal Agrawal <kagrawa@ecelinux02.ecn.purdue.edu>
+Date:   Mon Sep 30 19:13:54 2013 -0400
+
+    SO CLOSE
+
+commit 6217133fd6544e999612de445ef4d7f568de5f1e
+Author: Kunal Agrawal <kagrawa@ecelinux02.ecn.purdue.edu>
+Date:   Mon Sep 30 18:30:54 2013 -0400
+
+    i think I'm dine
+
+commit b2ee7535fbdf28fcd72847424d64cd29d5e32ca5
+Author: Kunal Agrawal <kagrawa@ecelinux02.ecn.purdue.edu>
+Date:   Mon Sep 30 17:54:06 2013 -0400
+
+    func 5 and 6
+
+commit f3dbcf78702aef2b4331654ac6af3b55f49f38d0
+Author: Kunal Agrawal <kagrawa@ecelinux02.ecn.purdue.edu>
+Date:   Mon Sep 30 17:12:51 2013 -0400
+
+    done first 4
+
+commit af7bac467e31e5a4793efa8933aeabe9f1e4ff50
+Author: Kunal Agrawal <kagrawa@ecelinux02.ecn.purdue.edu>
+Date:   Mon Sep 30 16:40:33 2013 -0400
+
+    updated max length
+
+commit 14bb7a8235a3b335734120e9e2570e60348c48ca
+Author: Kunal Agrawal <kagrawa@ecelinux02.ecn.purdue.edu>
+Date:   Mon Sep 30 16:24:36 2013 -0400
+
+    done first function
+
+commit d4f4d483320897c9ab146b848f5002b6c22a163d
+Author: Kunal Agrawal <kagrawa@ecelinux02.ecn.purdue.edu>
+Date:   Mon Sep 30 16:16:00 2013 -0400
+
+    final PA05
+
+commit eed19027cd01dbc37b88ee39293faa2c5f6ad2be
+Author: Kunal Agrawal <kagrawa@ecelinux13.ecn.purdue.edu>
+Date:   Thu Sep 26 20:36:57 2013 -0400
+
+    add PA05
+
+commit 4f44e9fd498dd434e4847a676bd5daa6160c59c2
+Author: Kunal Agrawal <kagrawa@ecelinux11.ecn.purdue.edu>
+Date:   Fri Sep 20 18:43:49 2013 -0400
+
+    adding zip
+
+commit 12eb77e22f8674498fcd52cc2bbd9d1da139aa4c
+Author: Kunal Agrawal <kagrawa@ecelinux11.ecn.purdue.edu>
+Date:   Fri Sep 20 18:39:58 2013 -0400
+
+    commented pa04
+
+commit 2c6839535f4814edf4d2006b119fc514d0d4f9fd
+Author: Kunal Agrawal <kagrawa@ecelinux11.ecn.purdue.edu>
+Date:   Fri Sep 20 17:58:26 2013 -0400
+
+    done Pa04
+
+commit 24ca5d33cd65318da7f134596a0e1a79eaa944d1
+Author: Kunal Agrawal <kagrawa@ecelinux11.ecn.purdue.edu>
+Date:   Fri Sep 20 17:40:24 2013 -0400
+
+    almost done Pa04
+
+commit fc3ba40411daa323624816f5cff7f9ccc4b6dd26
+Author: Kunal Agrawal <kagrawa@ecelinux29.ecn.purdue.edu>
+Date:   Thu Sep 19 21:39:57 2013 -0400
+
+    4th assign
+
+commit 06e5ad6c673934ea29e61db7090286410b9aaea5
+Author: Kunal Agrawal <kagrawa@ecelinux29.ecn.purdue.edu>
+Date:   Mon Sep 16 21:08:27 2013 -0400
+
+    PA04
+
+commit 505a3184f5a99b685ddef35a2f9eeb118b869353
+Author: Kunal Agrawal <kagrawa@ecelinux29.ecn.purdue.edu>
+Date:   Fri Sep 13 23:18:32 2013 -0400
+
+    done
+
+commit 8aef66e956700a4386946915c1517e9a11afba1b
+Author: Kunal Agrawal <kagrawa@ecelinux29.ecn.purdue.edu>
+Date:   Fri Sep 13 23:08:07 2013 -0400
+
+    commenting
+
+commit d5ec106e2a8368abb5de4513c23f29f76e1bb21c
+Author: Kunal Agrawal <kagrawa@ecelinux29.ecn.purdue.edu>
+Date:   Fri Sep 13 21:28:35 2013 -0400
+
+    binarysearch first attempt
+
+commit 5b2cc42959b1cc76c15265b4bca89c05dff29985
+Author: Kunal Agrawal <kagrawa@ecelinux28.ecn.purdue.edu>
+Date:   Fri Sep 13 19:44:02 2013 -0400
+
+    done quicksort
+
+commit 5a5d2772b1b24eeedbc89c9d3365da214651d15b
+Author: Kunal Agrawal <kagrawa@ecelinux28.ecn.purdue.edu>
+Date:   Fri Sep 13 17:45:55 2013 -0400
+
+    quicksort try
+
+commit e0183829898117fb6c677156617cd2413c9cf47f
+Author: Kunal Agrawal <kagrawa@ecelinux25.ecn.purdue.edu>
+Date:   Tue Sep 10 11:51:37 2013 -0400
+
+    working on 1
+
+commit ea039638c2dcd1a0afe62f3d1fce7c392bc79c1b
+Author: Kunal Agrawal <kagrawa@ecelinux25.ecn.purdue.edu>
+Date:   Tue Sep 10 11:13:22 2013 -0400
+
+    1st almost done
+
+commit 0be8fb2ef18e647b6eaf0f4e8274e0586b6ff435
+Author: Kunal Agrawal <kagrawa@ecelinux25.ecn.purdue.edu>
+Date:   Tue Sep 10 10:47:02 2013 -0400
+
+    new PA04
+
+commit e9fb5267b9fd77caf81d44edf6622246e5256174
+Author: Kunal Agrawal <kagrawa@ecelinux05.ecn.purdue.edu>
+Date:   Thu Sep 5 19:52:28 2013 -0400
+
+    Assgn 3
+
+commit 1863a0b4950eb15e97ba346c1dea2d2e1a911636
+Author: Kunal Agrawal <kagrawa@ecelinux28.ecn.purdue.edu>
+Date:   Mon Sep 2 23:21:14 2013 -0400
+
+    done
+
+commit baca9644aae96f53f32f5acaa3f480c9236d2c18
+Author: Kunal Agrawal <kagrawa@ecelinux28.ecn.purdue.edu>
+Date:   Mon Sep 2 21:56:31 2013 -0400
+
+    so close
+
+commit 1ce0bdb3735d71f94fe52a174fcf4ced1115c0ac
+Author: Kunal Agrawal <kagrawa@ecelinux28.ecn.purdue.edu>
+Date:   Mon Sep 2 20:58:26 2013 -0400
+
+    2
+
+commit dbcdd6b85b054b4d5b71366e15f1c9aaf2b8bc42
+Author: Kunal Agrawal <kagrawa@ecelinux28.ecn.purdue.edu>
+Date:   Mon Sep 2 20:25:38 2013 -0400
+
+    made priv
+
+commit 7d3601be832f2a1bb64a2834ff1067483d06ccd1
+Author: Kunal Agrawal <kagrawa@ecelinux28.ecn.purdue.edu>
+Date:   Mon Sep 2 19:25:42 2013 -0400
+
+    almost don
+
+commit fe6069c1c5fd337268082ba0c2438487040e5cef
+Author: Kunal Agrawal <kagrawa@ecelinux13.ecn.purdue.edu>
+Date:   Mon Sep 2 16:01:35 2013 -0400
+
+    5/7 done
+
+commit 725922c38a75f5bac47884f488db23e84fa9a48a
+Author: Kunal Agrawal <kagrawa@ecelinux13.ecn.purdue.edu>
+Date:   Mon Sep 2 15:44:15 2013 -0400
+
+    half done
+
+commit f1f67000edf287f968de53f35ea15ae87bf40546
+Author: Kunal Agrawal <kagrawa@ecelinux13.ecn.purdue.edu>
+Date:   Mon Sep 2 15:14:18 2013 -0400
+
+    PA02
+
+commit 7925aa07125c2bddfb9bb7cfe9f5d7f3536ba649
+Author: Kunal Agrawal <kagrawa@ecelinux09.ecn.purdue.edu>
+Date:   Tue Aug 27 11:42:32 2013 -0400
+
+    first attempt
+
+commit f95768341c4ab1b1caaf7fa85a9eb98037fa370e
+Author: Kunal Agrawal <kagrawa@ecelinux13.ecn.purdue.edu>
+Date:   Tue Aug 27 01:39:37 2013 -0400
+
+    start homework
+
+commit 6bc166feaaf182f66c0075073c8589bbbd8d090d
+Author: kunal3 <kagrawa@purdue.edu>
+Date:   Mon Aug 26 22:35:57 2013 -0700
+
+    Initial commit
