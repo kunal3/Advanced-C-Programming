@@ -1,0 +1,6 @@
+GCC = gcc
+CFLAGS = -g -Wall -Wshadow
+LIBS = 
+SOURCES = answer06.c pa06.c
+TARGET = pa06
+TESTCASES := $(shell seq 0 19)
