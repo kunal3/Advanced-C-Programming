@@ -180,13 +180,28 @@ struct Image * loadImage(const char* filename)
     }
 
   struct ImageHeader header;
+
   if(fread(&header, sizeof(struct ImageHeader), 1, fp) !=1 )
     {
       printf("Failed to open file '%s'\n", filename);
       return NULL;
     }
 
-  struct Image * image = malloc(sizeof(struct image));
+  if(header.magic_bits != ECE264_IMAGE_MAGIC_BITS)
+    {
+      printf("Magic bits do not match.\n");
+      fclose(fp);
+      return NULL;
+    }
+
+  struct Image * image = malloc(sizeof(struct Image));
+
+  if(image == NULL)
+    {
+      printf("Malloc for image failed.\n");
+      fclose(fp);
+      return NULL;
+    }
 
   image->width = header.width;
   image->height = header.height;
@@ -194,6 +209,8 @@ struct Image * loadImage(const char* filename)
   if(image->width < 1 || image->height < 1)
     {
       printf("Error: Height or Width or not valid\n");
+      fclose(fp);
+      free(image);
       return NULL;
     }
 
@@ -202,6 +219,7 @@ struct Image * loadImage(const char* filename)
   if(image->comment == NULL)
     {
       printf("Malloc failed to allocate %d bytes for image->comment\n",header.comment_len);
+      fclose(fp);
       free(image);
       return NULL;
     }
@@ -210,26 +228,32 @@ struct Image * loadImage(const char* filename)
 
   if(image->data == NULL)
     {
-      printf("Malloc failed to allocate %d bytes for image->data\n",header.width * header.height * sizeof(uint8_t));
+      printf("Malloc failed to allocate %zu bytes for image->data\n", header.width * header.height * sizeof(uint8_t));
       free(image);
       return NULL;
     }
     
-  if(fread(image->comment, sizeof(char), header.comment_len, fp)! = header.comment_len)  
+  if(fread(image->comment, sizeof(char), header.comment_len, fp) != header.comment_len)  
     {
       printf("Error: Header size is not 16 bytes\n");
       return NULL;
     }
 
-  if(fread(image->data, sizeof(uint8_t), header.width * header.height, fp) != header.width * header.height)
+  if(fread(image->data, sizeof(uint8_t), header.width * header.height, fp) != (header.width * header.height))
     {
       printf("Error: Data size is not %x bytes\n", (header.width * header.height));
       return NULL;
     }
 
   if(feof(fp)!=0)
+    {
+      printf("Somethings wrong\n");
+      return NULL;
+    }
 
-  return NULL;
+  fclose(fp);
+
+  return image;
 }
 
 
@@ -245,12 +269,12 @@ struct Image * loadImage(const char* filename)
  */
 void freeImage(struct Image * image)
 {
-  if(image==NULL)
-    return NULL;
-  
-  free(image->comment);
-  free(image->data);
-  free(image);
+  if(image!=NULL)
+    {
+      free(image->data);
+      free(image->comment);
+      free(image);
+    }
 }
 
 /*
@@ -279,5 +303,21 @@ void freeImage(struct Image * image)
  */
 void linearNormalization(struct Image * image)
 {
+  int min = image->data[0];
+  int max = image->data[0];
+  int i = 0;
+  for(i=0; i< image->height * image->width; i++)
+    {
+      if(image->data[i] < min)
+	min = image->data[i];
+      if(max > image->data[i])
+	max = image->data[i];
+    }
 
+  for(i=0; i< image->height * image->width; i++)
+    {
+      image->data[i]=(image->data[i] - min) * 255.0 / (max - min);
+    }
+
+  free(image);
 }
