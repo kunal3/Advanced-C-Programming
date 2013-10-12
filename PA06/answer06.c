@@ -172,6 +172,7 @@
  */
 struct Image * loadImage(const char* filename)
 {
+  // opening file
   FILE * fp = fopen(filename, "rb");
   if(fp==NULL)
     {
@@ -181,12 +182,14 @@ struct Image * loadImage(const char* filename)
 
   struct ImageHeader header;
 
+  // check if file opened
   if(fread(&header, sizeof(struct ImageHeader), 1, fp) !=1 )
     {
       printf("Failed to open file '%s'\n", filename);
       return NULL;
     }
 
+  // checking if magicbits are right
   if(header.magic_bits != ECE264_IMAGE_MAGIC_BITS)
     {
       printf("Magic bits do not match.\n");
@@ -196,6 +199,7 @@ struct Image * loadImage(const char* filename)
 
   struct Image * image = malloc(sizeof(struct Image));
 
+  // check if image was created
   if(image == NULL)
     {
       printf("Malloc for image failed.\n");
@@ -206,6 +210,7 @@ struct Image * loadImage(const char* filename)
   image->width = header.width;
   image->height = header.height;
 
+  // check if height and width are sane
   if(image->width < 1 || image->height < 1)
     {
       printf("Error: Height or Width or not valid\n");
@@ -216,6 +221,7 @@ struct Image * loadImage(const char* filename)
 
   image->comment = malloc(header.comment_len * sizeof(char));
 
+  // check if comment exists
   if(image->comment == NULL)
     {
       printf("Malloc failed to allocate %d bytes for image->comment\n",header.comment_len);
@@ -226,33 +232,51 @@ struct Image * loadImage(const char* filename)
 
   image->data = malloc(header.width * header.height * sizeof(uint8_t));
 
+  // check if data exists
   if(image->data == NULL)
     {
       printf("Malloc failed to allocate %zu bytes for image->data\n", header.width * header.height * sizeof(uint8_t));
+      fclose(fp);
       free(image);
       return NULL;
     }
     
+  // check if header got right memory allocated
   if(fread(image->comment, sizeof(char), header.comment_len, fp) != header.comment_len)  
     {
       printf("Error: Header size is not 16 bytes\n");
+      fclose(fp);
       return NULL;
     }
 
+  // check if data got right memory allocated
   if(fread(image->data, sizeof(uint8_t), header.width * header.height, fp) != (header.width * header.height))
     {
       printf("Error: Data size is not %x bytes\n", (header.width * header.height));
+      fclose(fp);
       return NULL;
     }
 
-  if(feof(fp)!=0)
+  // check if comment ends in a NULL char
+  if(image->comment[header.comment_len - 1] != '\0')
     {
-      printf("Somethings wrong\n");
+      printf("No NULL char at end of comment.\n");
+      fclose(fp);
+      free(image);
+      return NULL;
+    }
+
+  // attempts to read one extra char from the image
+  uint8_t last;
+  if(fread(&last, sizeof(uint8_t), 1, fp) == 1)
+    {
+      printf("Height wrong\n");
+      fclose(fp);
+      free(image);
       return NULL;
     }
 
   fclose(fp);
-
   return image;
 }
 
@@ -269,6 +293,7 @@ struct Image * loadImage(const char* filename)
  */
 void freeImage(struct Image * image)
 {
+  // if image exists, free its data in opposite order of malloc
   if(image!=NULL)
     {
       free(image->data);
@@ -303,21 +328,23 @@ void freeImage(struct Image * image)
  */
 void linearNormalization(struct Image * image)
 {
-  int min = image->data[0];
-  int max = image->data[0];
+  // create max and min variables to hold respective values
+  uint8_t min = image->data[0];
+  uint8_t max = image->data[0];
   int i = 0;
-  for(i=0; i< image->height * image->width; i++)
+
+  // find max and min using for loop
+  for(i=1; i< (image->height * image->width); i++)
     {
       if(image->data[i] < min)
 	min = image->data[i];
-      if(max > image->data[i])
+      if(image->data[i] > max)
 	max = image->data[i];
     }
 
-  for(i=0; i< image->height * image->width; i++)
+  // linearize data using for loop
+  for(i=0; i< (image->height * image->width); i++)
     {
       image->data[i]=(image->data[i] - min) * 255.0 / (max - min);
     }
-
-  free(image);
 }
