@@ -35,11 +35,6 @@ void List_print(FILE * out, Node * head)
  */
 void List_destroy(Node * head)
 {
-  /*if(head==NULL)
-    return;
-  List_destroy(head->next);
-  free(head);
-  return;*/
   while(head!=NULL)
     {
       Node *p = head->next;
@@ -99,9 +94,11 @@ Node * List_create(int value, int index)
  */
 Node * List_build(int * value, int * index, int length)
 {
+  if(index == 0 || length==0)
+    return NULL;
   Node * h = NULL;
 
-  int i=0;
+  int i;
 
   for(i=0; i< length; i++)
     h = List_insert_ascend(h, value[i], index[i]);
@@ -195,13 +192,22 @@ Node * List_delete(Node * head, int index)
  */
 Node * List_copy(Node * head)
 {
-  if(head == NULL)
-    return NULL;
-  Node * copy = malloc(sizeof(Node));
-  copy->value = head->value;
-  copy->index = head->index;
-  copy->next = List_copy(head->next);
+
+  Node * copy = NULL;
+  while(head!=NULL)
+    {
+      copy = List_insert_ascend(copy, head->value, head->index);
+      head = head->next;
+    }
+
   return copy;
+  /* if(head == NULL) */
+  /*   return NULL; */
+  /* Node * copy = malloc(sizeof(Node)); */
+  /* copy->value = head->value; */
+  /* copy->index = head->index; */
+  /* copy->next = List_copy(head->next); */
+  /* return copy; */
 }
 
 
@@ -226,8 +232,6 @@ Node * List_copy(Node * head)
  * This function should not modify either "head1" or "head2". You only
  * need to make a clone of "head1".
  */
-
-Node * merge_h(Node*, Node*);
 
 Node * List_merge(Node * head1, Node * head2)
 {
