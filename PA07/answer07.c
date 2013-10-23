@@ -35,10 +35,17 @@ void List_print(FILE * out, Node * head)
  */
 void List_destroy(Node * head)
 {
-  if(head==NULL)
+  /*if(head==NULL)
     return;
   List_destroy(head->next);
   free(head);
+  return;*/
+  while(head!=NULL)
+    {
+      Node *p = head->next;
+      free(head);
+      head = p;
+    }
 }
 
 /**
@@ -91,18 +98,15 @@ Node * List_create(int value, int index)
  * See the notes to "List_insert_ascend"
  */
 Node * List_build(int * value, int * index, int length)
-{/*
-  Node * head = NULL;
-  if(length == 0)
-    return head;
-  
-  head = malloc(sizeof(Node));
-  
-  while(
-  head = List_insert_ascend(head, *(value+i), *(index+i));
-  
-  return head;
- */
+{
+  Node * h = NULL;
+
+  int i=0;
+
+  for(i=0; i< length; i++)
+    h = List_insert_ascend(h, value[i], index[i]);
+
+  return h;
 }
 
 
@@ -130,6 +134,12 @@ Node * List_insert_ascend(Node * head, int value, int index)
   if(head == NULL)
     return List_create(value, index);
 
+  if(head->index == index)
+    {
+      head->value += value;
+      return head;
+    }
+
   if(head->index > index)
     {
       Node * inserted = List_create(value, index);
@@ -154,10 +164,15 @@ Node * List_insert_ascend(Node * head, int value, int index)
  */
 Node * List_delete(Node * head, int index)
 {
-  while(head->index != index)
-    head = head->next;
-  while(head != NULL)
-    head = head->next;
+  if(head==NULL)
+    return NULL;
+  if(head->index == index)
+    {
+      Node * p = head->next;
+      free(head);
+      return p;
+    }
+  head->next = List_delete(head->next, index);
   return head;
 }
 
@@ -211,8 +226,22 @@ Node * List_copy(Node * head)
  * This function should not modify either "head1" or "head2". You only
  * need to make a clone of "head1".
  */
+
+Node * merge_h(Node*, Node*);
+
 Node * List_merge(Node * head1, Node * head2)
 {
-    return NULL;
-}
+  if(head1 == NULL) return head2;
+  if(head2 == NULL) return head1;
 
+  Node * head3 = List_copy(head1);
+  while(head2!= NULL)
+    {
+      head3 = List_insert_ascend(head3, head2->value, head2->index);
+      head2 = head2->next;
+      if(head3->value == 0)
+	head3 = List_delete(head3, head3->index);
+    }
+
+  return head3;
+}
