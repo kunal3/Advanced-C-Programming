@@ -20,8 +20,15 @@
 
 SparseNode *SparseNode_create(int index, int value)
 {
+  SparseNode * array = malloc(sizeof(SparseNode));
+  
+  array-> index = index;
+  array-> value = value;
 
-  return NULL;
+  array->left = NULL;
+  array->right = NULL;
+
+  return array;
 }
 
 /* Add a particular value into a sparse array tree on a particular index.
@@ -44,6 +51,26 @@ SparseNode *SparseNode_create(int index, int value)
 
 SparseNode * SparseArray_insert ( SparseNode * array, int index, int value )
 {
+  if(array == NULL)
+    return SparseNode_create(index, value);
+
+  if(array->index == index)
+    {
+      SparseNode * arr = SparseNode_create(index, value);
+      arr->left = array->left;
+      arr->right = array->right;
+      arr = array;
+      free(array);
+    } 
+
+  if(array->value > value)
+    {
+      array->left = SparseArray_insert(array->left, index, value);
+      return array;
+    }
+
+  array->right = SparseArray_insert(array->right, index, value);
+
   return array;
 
 }
@@ -70,7 +97,14 @@ SparseNode * SparseArray_insert ( SparseNode * array, int index, int value )
 
 SparseNode *SparseArray_build(int * indicies, int * values, int length)
 {
-  return NULL;
+  SparseNode * array = SparseNode_create(indicies++, values++);
+  array->left = NULL;
+  array->right = NULL;
+
+
+  if(array->value > value)
+
+  return SparseArray_insert(array, indicies, values);
 }
 
 /* Destroy an entire sparse array tree. 
