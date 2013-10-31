@@ -2,6 +2,29 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define CHECK(node) check(node, __FUNCTION__, __LINE__);
+
+void kbam(const char * function, int lineno, const char *msg)
+{
+  fprintf(stderr, "%s (function=%s, lineno=%d)\n", msg, function, lineno);
+  char * evil =NULL;
+  *evil = 4;
+}
+
+void check(SparseNode * node, const char * function, int lineno)
+{
+  if(node == NULL) return;
+  if(node->value == 0)
+    kbam(function, lineno, "Value == 0");
+  if(node->left != NULL && node->left->index >= node->index)
+    kbam(function, lineno, "Left->index >= index");
+  if(node->right != NULL && node->right->index <= node->index)
+    kbam(function, lineno, "Right->index <= index");
+  check(node->left, function, lineno);
+  check(node->right, function, lineno);
+}
+
+
 /* 
  * Create a single instance of a sparse array tree node with a specific
  * index and value. This Sparse array will be implemented by a binary tree.
@@ -51,6 +74,8 @@ SparseNode *SparseNode_create(int index, int value)
 
 SparseNode * SparseArray_insert ( SparseNode * array, int index, int value )
 {
+  CHECK(array);
+
   if(value == 0)
     return array;
 
@@ -74,6 +99,7 @@ SparseNode * SparseArray_insert ( SparseNode * array, int index, int value )
 
   array->right = SparseArray_insert(array->right, index, value);
 
+  CHECK(array);
   return array;
 
 }
@@ -100,11 +126,14 @@ SparseNode * SparseArray_insert ( SparseNode * array, int index, int value )
 
 SparseNode *SparseArray_build(int * indicies, int * values, int length)
 {
-  SparseNode * array = SparseNode_create(indicies[0], values[0]);
-  int i=1;
+  if(length == 0) 
+    return NULL;
 
-  while(i != length)
-      array = SparseArray_insert(array, indicies[i], values[i++]);
+  SparseNode * array = SparseNode_create(indicies[0], values[0]);
+  int i=0;
+
+  while(++i != length)
+      array = SparseArray_insert(array, indicies[i], values[i]);
 
   return array;
 }
@@ -181,13 +210,13 @@ int SparseArray_getMax ( SparseNode * array )
  */
 SparseNode * SparseArray_getNode(SparseNode * array, int index )
 {
-  if(array!=NULL)
+  if(array != NULL)
     {
       if(array->index == index)
 	return array;
       if(array->index > index)
 	return SparseArray_getNode(array->left, index);
-      if(array->index < index)
+      else
 	return SparseArray_getNode(array->right, index);
     }
   else return NULL;
@@ -253,9 +282,9 @@ SparseNode * SparseArray_remove ( SparseNode * array, int index )
       SparseNode *newNode = array->right;
       while(newNode->left != NULL)
 	newNode = newNode->left;
-      array->value = newNode->value;
-      newNode->value = value;
-      array->right = SparseArray_destroy(array->right, value);
+      array->index = newNode->index;
+      newNode->index = index;
+      array->right = SparseArray_remove(array->right, index);
       return array;
     }
 
@@ -276,12 +305,10 @@ SparseNode * SparseArray_remove ( SparseNode * array, int index )
 
 SparseNode * SparseArray_copy(SparseNode * array)
 {
-
-  SparseNode *copy = NULL;
-  while(copy!=NULL)
-    {
-      copy = SparseArray_Insert()
-    }
+  if(array == NULL) return NULL;
+  SparseNode *copy = SparseNode_create(array->index, array->value);
+  copy->left = SparseArray_copy(array->left);
+  copy->right = SparseArray_copy(array->right);
   return copy;
 }
 
@@ -314,5 +341,4 @@ SparseNode * SparseArray_merge(SparseNode * array_1, SparseNode * array_2)
 {
 
   return NULL;
-
 }
