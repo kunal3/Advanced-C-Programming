@@ -43,6 +43,7 @@ void check(SparseNode * node, const char * function, int lineno)
 
 SparseNode *SparseNode_create(int index, int value)
 {
+  if (value == 0) return NULL;
   SparseNode * array = malloc(sizeof(SparseNode));
   
   array-> index = index;
@@ -95,7 +96,6 @@ SparseNode * SparseArray_insert ( SparseNode * array, int index, int value )
   array->right = SparseArray_insert(array->right, index, value);
 
   return array;
-
 }
 
 /* Build a sparse array tree from given indices and values with specific length.
@@ -331,18 +331,48 @@ SparseNode * SparseArray_copy(SparseNode * array)
  * Hint: you may write new functions
  */
 
-SparseNode * SparseArray_insert2()
+SparseNode * SparseArray_insert2(SparseNode * array, int index, int value)
 {
+  if(value == 0)
+    return array;
 
+  if(array == NULL)
+    return SparseNode_create(index, value);
+
+  if(array->index == index)
+    {
+      array->value += value;
+      if(array->value == 0)
+	return SparseArray_remove(array, array->index);
+      return array;
+    } 
+
+  if(array->index > index)
+    {
+      array->left = SparseArray_insert2(array->left, index, value);
+      return array;
+    }
+
+  array->right = SparseArray_insert2(array->right, index, value);
+
+  return array;
 }
 
-SparseNode * SparseArray_mergehelper(SparseNode * array1, SparseNode * array2)
+void * SparseArray_mergehelper(SparseNode * array1, SparseNode * array2)
 {
+  if(array1==NULL) return NULL;
+  if(array2==NULL) return NULL;
 
+  array1 = SparseArray_insert2(array1, array2->index, array2->value);
+  
+  SparseArray_mergehelper(array1, array2->left);
+  SparseArray_mergehelper(array1, array2->right);
 }
 
 SparseNode * SparseArray_merge(SparseNode * array_1, SparseNode * array_2)
 {
+  SparseNode * array_3 = SparseArray_copy(array_1);
+  SparseArray_mergehelper(array_3, array_2);
 
-  return NULL;
+  return array_3;
 }
