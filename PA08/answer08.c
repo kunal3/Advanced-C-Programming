@@ -6,8 +6,8 @@
 
 void kbam(const char * function, int lineno, const char *msg)
 {
-  fprintf(stderr, "%s (function=%s, lineno=%d)\n", msg, function, lineno);
-  char * evil =NULL;
+  fprintf(stderr, "%s (function=%s, lineno=%d)\n\n", msg, function, lineno);
+  char * evil = NULL;
   *evil = 4;
 }
 
@@ -15,11 +15,11 @@ void check(SparseNode * node, const char * function, int lineno)
 {
   if(node == NULL) return;
   if(node->value == 0)
-    kbam(function, lineno, "Value == 0");
-  if(node->left != NULL && node->left->index >= node->index)
-    kbam(function, lineno, "Left->index >= index");
+    kbam(function, lineno, "\nValue == 0");
+  if(node->left != NULL && (node->left->index) >= node->index)
+    kbam(function, lineno, "\nLeft->index >= index");
   if(node->right != NULL && node->right->index <= node->index)
-    kbam(function, lineno, "Right->index <= index");
+    kbam(function, lineno, "\nRight->index <= index");
   check(node->left, function, lineno);
   check(node->right, function, lineno);
 }
@@ -74,8 +74,6 @@ SparseNode *SparseNode_create(int index, int value)
 
 SparseNode * SparseArray_insert ( SparseNode * array, int index, int value )
 {
-  CHECK(array);
-
   if(value == 0)
     return array;
 
@@ -84,14 +82,11 @@ SparseNode * SparseArray_insert ( SparseNode * array, int index, int value )
 
   if(array->index == index)
     {
-      SparseNode * arr = SparseNode_create(index, value);
-      arr->left = array->left;
-      arr->right = array->right;
-      arr = array;
-      free(array);
+      array->value = value;
+      return array;
     } 
 
-  if(array->value > value)
+  if(array->index > index)
     {
       array->left = SparseArray_insert(array->left, index, value);
       return array;
@@ -99,7 +94,6 @@ SparseNode * SparseArray_insert ( SparseNode * array, int index, int value )
 
   array->right = SparseArray_insert(array->right, index, value);
 
-  CHECK(array);
   return array;
 
 }
@@ -133,7 +127,7 @@ SparseNode *SparseArray_build(int * indicies, int * values, int length)
   int i=0;
 
   while(++i != length)
-      array = SparseArray_insert(array, indicies[i], values[i]);
+    array = SparseArray_insert(array, indicies[i], values[i]);
 
   return array;
 }
@@ -287,7 +281,6 @@ SparseNode * SparseArray_remove ( SparseNode * array, int index )
       array->right = SparseArray_remove(array->right, index);
       return array;
     }
-
   return array;
 }
 
@@ -309,6 +302,7 @@ SparseNode * SparseArray_copy(SparseNode * array)
   SparseNode *copy = SparseNode_create(array->index, array->value);
   copy->left = SparseArray_copy(array->left);
   copy->right = SparseArray_copy(array->right);
+    
   return copy;
 }
 
@@ -336,6 +330,16 @@ SparseNode * SparseArray_copy(SparseNode * array)
  * 
  * Hint: you may write new functions
  */
+
+SparseNode * SparseArray_insert2()
+{
+
+}
+
+SparseNode * SparseArray_mergehelper(SparseNode * array1, SparseNode * array2)
+{
+
+}
 
 SparseNode * SparseArray_merge(SparseNode * array_1, SparseNode * array_2)
 {
