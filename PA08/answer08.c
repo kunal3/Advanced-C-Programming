@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// ------- Invarient checking code given by Aaron Michaeux ---------------
+/*
 #define CHECK(node) check(node, __FUNCTION__, __LINE__);
 
 void kbam(const char * function, int lineno, const char *msg)
@@ -23,7 +25,8 @@ void check(SparseNode * node, const char * function, int lineno)
   check(node->left, function, lineno);
   check(node->right, function, lineno);
 }
-
+*/
+// ----------------------------------------------------------------------
 
 /* 
  * Create a single instance of a sparse array tree node with a specific
