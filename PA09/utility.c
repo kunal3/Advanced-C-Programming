@@ -1,14 +1,8 @@
-#include "pa08.h"
+#include "pa09.h"
 #include <stdio.h>
 #include <stdlib.h>
 
-HuffNode * Huffman(char **header)
-{
-  // some check for binary vs char  
-
-}
-
-HuffNode * Huffman_char(FILE * input)
+HuffNode * Huffman_char(FILE * fptr)
 {
   int command=fgetc(fptr);
   int character=0;
@@ -16,24 +10,23 @@ HuffNode * Huffman_char(FILE * input)
 
   while(!feof(fptr)) // not end of tree THIS IS WRONG
     {
-      if(command == 1) // command is 1
+      if(command == 49) // command is 1
 	{
 	  character = fgetc(fptr);
 	  HuffNode *a = HuffNode_create(character);
 	  st = Stack_push(st, a);
 	}
-      else if(command == 0)
+      else if(command == 48)
 	{
-	  HuffNode *a = st->next;
+	  HuffNode *a = st->node;
 	  st = Stack_pop(st);
 	  if(st == NULL)
 	    {
-	      // done, A is the root
 	      return a;
 	    }
 	  else
 	    {
-	      HuffNode *b = st->next;
+	      HuffNode *b = st->node;
 	      st = Stack_pop(st);
 	      HuffNode * par = malloc(sizeof(HuffNode));
 	      par->value = ' '; // doesn't matter
@@ -42,7 +35,9 @@ HuffNode * Huffman_char(FILE * input)
 	      st = Stack_push(st, par);
 	    }
 	}
+      command = fgetc(fptr);
     }
+  return st->node;
 }
 
 Stack * Stack_create(HuffNode * huff)
@@ -57,15 +52,15 @@ Stack * Stack_create(HuffNode * huff)
 Stack * Stack_push(Stack *st, HuffNode * huff)
 {
   Stack * newNode = Stack_create(huff);
-  newNode->next = huff;
-  newNode->node = st;
+  newNode->next = st;
+  newNode->node = huff;
   return newNode;
 }
 
 Stack * Stack_pop(Stack * st)
 {
   if (st == NULL) return NULL;
-  StackNode * b = st -> next;
+  Stack * b = st -> next;
   free (st);
   return b;
 }
@@ -79,20 +74,29 @@ HuffNode * HuffNode_create(int value)
   return huff;
 }
 
-void Huff_postOrderPrint(HuffNode *tree)
+void Huff_postOrderPrint(HuffNode *tree, FILE * fptr)
 {
   if (tree == NULL) return;
-  printf("Left\n");
-  Huff_postOrderPrint(tree->left);
-  printf("Back\n");
-  printf("Right\n");
-  Huff_postOrderPrint(tree->right);
-  printf("Back\n");
+  fprintf(fptr, "Left\n");
+  Huff_postOrderPrint(tree->left, fptr);
+  fprintf(fptr, "Back\n");
+  fprintf(fptr, "Right\n");
+  Huff_postOrderPrint(tree->right, fptr);
+  fprintf(fptr, "Back\n");
   
   if (tree->left == NULL && tree->right == NULL) 
-    printf("Leaf: %c\n", tree->value);
+    fprintf(fptr, "Leaf: %c\n", tree->value);
 }
 
+void HuffNode_destroy(HuffNode * huff)
+{
+  if(huff!=NULL)
+    {
+      HuffNode_destroy(huff->left);      
+      HuffNode_destroy(huff->right);
+      free(huff);
+    }
+}
 
 int ifLeaf(HuffNode * huff)
 {

@@ -9,7 +9,6 @@ int main(int argc, char** argv)
       printf("usage: ./pa09 <input file> <output file>\n");
       return EXIT_FAILURE;
     }
-  
   FILE * fptr = NULL;
   fptr = fopen(argv[1], "r");
   if (fptr == NULL)
@@ -18,9 +17,8 @@ int main(int argc, char** argv)
       return EXIT_FAILURE;
     }
   
-  SparseNode * array = NULL;
-  array = Huffman(argv[1]);
-  
+  HuffNode * array = NULL;
+  array = Huffman_char(fptr);
   fclose(fptr);
   
   fptr = fopen(argv[2], "w");
@@ -30,9 +28,10 @@ int main(int argc, char** argv)
       return EXIT_FAILURE;
     }
 
-  // code
+  Huff_postOrderPrint(array, fptr);
 
-  SparseArray_destroy(array);
   fclose(fptr);
+  HuffNode_destroy(array);
+
   return EXIT_SUCCESS;
 }

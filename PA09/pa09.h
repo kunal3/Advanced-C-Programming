@@ -12,5 +12,12 @@ typedef struct _stack {
     HuffNode * node;
 } Stack;
 
-#endif
+//HuffNode * Huffman_char(FILE * fptr);
+Stack * Stack_create(HuffNode * huff);
+Stack * Stack_push(Stack *st, HuffNode * huff);
+Stack * Stack_pop(Stack * st);
+HuffNode * HuffNode_create(int value);
+//void Huff_postOrderPrint(HuffNode *tree, FILE * fptr);
+int ifLeaf(HuffNode * huff);
 
+#endif
