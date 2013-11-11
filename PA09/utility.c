@@ -37,7 +37,7 @@ HuffNode * Huffman_char(FILE * fptr)
 	}
       command = fgetc(fptr);
     }
-  return st->node;
+  //return st->node;
 }
 
 Stack * Stack_create(HuffNode * huff)

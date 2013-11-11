@@ -4,7 +4,7 @@
 
 int main(int argc, char** argv)
 {
-  if(argc!=3)
+  if(argc<2)
     {
       printf("usage: ./pa09 <input file> <output file>\n");
       return EXIT_FAILURE;
