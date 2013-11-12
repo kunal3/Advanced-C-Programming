@@ -2,6 +2,31 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+HuffNode * Huffman_bit(FILE * fptr)
+{
+  int cmdloc = 0;
+  unsigned char mask[] = {0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01};
+  
+  while(!feof(fptr))
+    {
+      unsigned char onebyte = fgetc(fptr);
+      unsigned char x = onebyte;
+      unsigned char y = fgetc(fptr);
+      if(onebyte&mask[cmdloc] == mask[cmdloc]) // command is 1
+	{
+	  x<<=(cmdloc+1);
+	  y>>=(7-cmdloc);
+	  x=x|y;
+	}
+      else
+	{
+	  x<<=1;
+	}
+      cmdloc=(cmdloc+1)%8;
+    }
+
+}
+
 HuffNode * Huffman_char(FILE * fptr)
 {
   int command=fgetc(fptr);
@@ -37,7 +62,6 @@ HuffNode * Huffman_char(FILE * fptr)
 	}
       command = fgetc(fptr);
     }
-  //return st->node;
 }
 
 Stack * Stack_create(HuffNode * huff)
@@ -97,19 +121,3 @@ void HuffNode_destroy(HuffNode * huff)
       free(huff);
     }
 }
-
-int ifLeaf(HuffNode * huff)
-{
-  if(huff == NULL) return 1;
-  if(huff->left != NULL) return 0;
-  if(huff->right != NULL) return 0;
-  return 1;
-}
-
-/* while(!isLeaf) */
-/*   { */
-/*     read one bit */
-/*     if(bit == 0) go left */
-/*     if(bit == 1) go right */
-/*   } */
-/* print the value and return to root */
