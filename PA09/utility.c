@@ -20,6 +20,8 @@ HuffNode * Huffman_bit(FILE * fptr)
 	{
 	//  printf("command = 1-----------------\n");
 	//  printf("mask = %d\n", mask[cmdloc]);
+	
+	// only error i see is when cmdloc is 7 here, which happens when 0 is second last command bit in a byte 
 	  x<<=(cmdloc+1);
 	  y>>=(7-cmdloc);
 	  x=x|y;
