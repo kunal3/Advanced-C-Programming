@@ -6,25 +6,63 @@ HuffNode * Huffman_bit(FILE * fptr)
 {
   int cmdloc = 0;
   unsigned char mask[] = {0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01};
-  
+  Stack *st = NULL;
   while(!feof(fptr))
     {
       unsigned char onebyte = fgetc(fptr);
       unsigned char x = onebyte;
       unsigned char y = fgetc(fptr);
-      if(onebyte&mask[cmdloc] == mask[cmdloc]) // command is 1
+      fseek(fptr, -1, SEEK_CUR);
+      printf("cmdloc = %d\n", cmdloc);
+      printf("fgetc = %d\n", fgetc(fptr));
+      fseek(fptr, -1, SEEK_CUR);
+      if((onebyte&mask[cmdloc]) == mask[cmdloc]) // command is 1
 	{
+	  printf("command = 1-----------------\n");
+	  printf("mask = %d\n", mask[cmdloc]);
 	  x<<=(cmdloc+1);
 	  y>>=(7-cmdloc);
 	  x=x|y;
+	  printf("x = %d\n", x);
+	  HuffNode *a = HuffNode_create(x);
+	  st = Stack_push(st, a);
 	}
       else
 	{
-	  x<<=1;
-	}
-      cmdloc=(cmdloc+1)%8;
-    }
+	  printf("command = 0----------------\n");
+	  int i = 0;
+	  do
+	    {
+	      printf("i=%d\n",i);
+	      HuffNode *a = st->node;
+	      st = Stack_pop(st);
+	      if(st == NULL)
+		{
+		  return a;
+		}
+	      else
+		{
+		  HuffNode *b = st->node;
+		  st = Stack_pop(st);
+		  HuffNode * par = malloc(sizeof(HuffNode));
+		  par->value = ' '; // doesn't matter
+		  par->right = a;
+		  par->left = b;
+		  st = Stack_push(st, par);
+		}
+	      i++;
+	      //if(cmdloc!=0)
+	      	fseek(fptr, -1, SEEK_CUR);
+	      printf("mask = %d\n", mask[cmdloc+i]);
+	    }while((fgetc(fptr)&mask[cmdloc+i])==0);
+	  
+	  fseek(fptr, -i, SEEK_CUR);
+	  printf("test fgetc=%d\n",fgetc(fptr));
+	  fseek(fptr, -1, SEEK_CUR);
+	} // end of command = 0
 
+      cmdloc=(cmdloc+1)%8;
+    } // end of while
 }
 
 HuffNode * Huffman_char(FILE * fptr)
@@ -33,7 +71,7 @@ HuffNode * Huffman_char(FILE * fptr)
   int character=0;
   Stack * st = NULL; 
 
-  while(!feof(fptr)) // not end of tree THIS IS WRONG
+  while(!feof(fptr)) // not end of tree 
     {
       if(command == 49) // command is 1
 	{
