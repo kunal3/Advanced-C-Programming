@@ -2,6 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// run line
+// gcc -Wall -Wshadow -g -DMYTEST utility.c && ./a.out
+
 void printByte(unsigned char b)
 {
   int i;
@@ -34,7 +37,6 @@ HuffNode * Huffman_bit(FILE * fptr)
 
 	  printByte(x); printf("\n"); fflush(stdout);
 
-	  // printf("\nx = %d\n", x);
 	  //HuffNode *a = HuffNode_create(x);
 	  //st = Stack_push(st, a);
 	}
