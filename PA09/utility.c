@@ -32,9 +32,8 @@ HuffNode * Huffman_bit(FILE * fptr)
 	  onebyte = fgetc(fptr);
 	  x = onebyte;
 	}
-      if(command) // command = 1
+      if(command)
 	{
-	  printf(" [1] "); fflush(stdout);
 	  y = fgetc(fptr);
 	  fseek(fptr, -1, SEEK_CUR);
 	  
@@ -42,24 +41,19 @@ HuffNode * Huffman_bit(FILE * fptr)
 	  y>>=(7-cmdloc);
 	  x=x|y;
 
-	  printByte(x); printf("\n"); fflush(stdout);
-
 	  HuffNode *a = HuffNode_create(x);
 	  st = Stack_push(st, a);
 	  onebyte = fgetc(fptr);
+	  if(cmdloc==7)
+	    onebyte = fgetc(fptr);
 	  x = onebyte;
 	}
       else // command = 0
 	{
-	  printf(" [0] "); fflush(stdout);
 	  HuffNode * a = NULL;
 	  a = st->node;
 	  st = Stack_pop(st);
-	  if(st == NULL) 
-	    {
-	      printf("\nTerminating condition\n");
-	      return a;
-	    } // terminate
+	  if(st == NULL) return a;
 	  else
 	    {
 	      HuffNode *b = st->node;
@@ -212,7 +206,7 @@ int main(int argc, char * * argv)
 
 			     0b11111111,
 			     0b01010101,
-			     0b10101010,
+			     0b11101010,
 
 			     0b10001111, 
 			     0b01110110, 
