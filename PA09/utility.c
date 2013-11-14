@@ -15,62 +15,63 @@ void printByte(unsigned char b)
 
 HuffNode * Huffman_bit(FILE * fptr)
 {
-  int cmdloc = 0;
+  int cmdloc = -1;
   unsigned char mask[] = {0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01};
   Stack *st = NULL;
+  unsigned char onebyte = fgetc(fptr);  
+  unsigned char y = 0;      
+  unsigned char x = onebyte;
+  int command = 0; 
+
   while(!feof(fptr))
     {
-      unsigned char onebyte = fgetc(fptr);
-      unsigned char x = onebyte;
-      unsigned char y = fgetc(fptr);
-      fseek(fptr, -1, SEEK_CUR);
-      if((onebyte&mask[cmdloc]) == mask[cmdloc]) // command is 1
+      cmdloc=(cmdloc+1)%8;
+      command = (((onebyte&mask[cmdloc])==mask[cmdloc])? 1:0);
+      if(cmdloc == 7 && !command)
+	{
+	  onebyte = fgetc(fptr);
+	  x = onebyte;
+	}
+      if(command) // command = 1
 	{
 	  printf(" [1] "); fflush(stdout);
-
+	  y = fgetc(fptr);
+	  fseek(fptr, -1, SEEK_CUR);
+	  
 	  x<<=(cmdloc+1);
 	  y>>=(7-cmdloc);
 	  x=x|y;
 
 	  printByte(x); printf("\n"); fflush(stdout);
 
-	  // printf("\nx = %d\n", x);
-	  //HuffNode *a = HuffNode_create(x);
-	  //st = Stack_push(st, a);
+	  HuffNode *a = HuffNode_create(x);
+	  st = Stack_push(st, a);
+	  onebyte = fgetc(fptr);
+	  x = onebyte;
 	}
-      else
+      else // command = 0
 	{
 	  printf(" [0] "); fflush(stdout);
-	  do
+	  HuffNode * a = NULL;
+	  a = st->node;
+	  st = Stack_pop(st);
+	  if(st == NULL) 
 	    {
-	      HuffNode * a = NULL;
-	      //a = st->node;
-	      //st = Stack_pop(st);
-	      if(st == NULL)
-		{
-		  printf("Terminating condition\n");
-		  return a;
-		}
-	      else
-		{
-		  if(0) {
-		    HuffNode *b = st->node;
-		    st = Stack_pop(st);
-		    HuffNode * par = malloc(sizeof(HuffNode));
-		    par->value = ' '; 
-		    par->right = a;
-		    par->left = b;
-		    st = Stack_push(st, par);
-		  }
-		}
-	      cmdloc=(cmdloc+1)%8;
-	    }while((onebyte&mask[cmdloc])==0);
-	  fseek(fptr, -1, SEEK_CUR);
-	  cmdloc--;
-	} // end of command = 0
-
-      cmdloc=(cmdloc+1)%8;
-    } // end of while
+	      printf("\nTerminating condition\n");
+	      return a;
+	    } // terminate
+	  else
+	    {
+	      HuffNode *b = st->node;
+	      st = Stack_pop(st);
+	      HuffNode * par = malloc(sizeof(HuffNode));
+	      par->value = ' '; 
+	      par->right = a;
+	      par->left = b;
+	      st = Stack_push(st, par);
+	    }
+	}
+    }
   return NULL;
 }
 
@@ -185,7 +186,20 @@ int main(int argc, char * * argv)
  [1] 1111-0100 
  [1] 0000-1001 
  [1] 1000-1111 
-    */
+
+ 
+
+ [1] 0001-1110 
+ [1] 1101-1011 
+ [1] 1111-1110 
+ [1] 0111-1101 
+ [1] 1110-0000 
+ [1] 1111-0100 
+ [1] 0000-1001 
+ [1] 0000-0000 
+
+     */
+
     FILE * fp = fopen(filename, "wb");
     unsigned char bits[] = { 0b10001111, 
 			     0b01110110, 
@@ -195,15 +209,23 @@ int main(int argc, char * * argv)
 			     0b00000111,
 			     0b11010010,
 			     0b00010011,
-			     0b10001111, 
 
+			     0b11111111,
+			     0b01010101,
+			     0b10101010,
+
+			     0b10001111, 
 			     0b01110110, 
 			     0b11111111, 
 			     0b11010111,
 			     0b11011111,
 			     0b00000111,
 			     0b11010010,
-			     0b00010011
+			     0b00010011,
+			     0b00000000,
+
+			     0b00000000,
+			     0b00000000
     };
     int len = sizeof(bits) / sizeof(unsigned char);
     int i;
