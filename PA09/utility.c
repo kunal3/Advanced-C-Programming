@@ -2,60 +2,56 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void printByte(unsigned char b)
-{
-  int i;
-  for(i = 0; i < 8; ++i) {
-    printf("%d", (int)((b >> (7-i)) & 1));
-    if(i == 3)
-      printf("-");
-  }
-  printf(" ");
-}
-
+// function to create a Huffman tree for binary input and return the head
 HuffNode * Huffman_bit(FILE * fptr)
 {
+  // initialize variables
+  unsigned char onebyte = fgetc(fptr);  
+  unsigned char x = onebyte;
+  unsigned char y = 0;
+  int command = 0; 
   int cmdloc = -1;
   unsigned char mask[] = {0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01};
   Stack *st = NULL;
-  unsigned char onebyte = fgetc(fptr);  
-  unsigned char y = 0;      
-  unsigned char x = onebyte;
-  int command = 0; 
 
   while(!feof(fptr))
     {
+      // update the command location, then get the new command
       cmdloc=(cmdloc+1)%8;
       command = (((onebyte&mask[cmdloc])==mask[cmdloc])? 1:0);
-      if(cmdloc == 7 && !command)
+
+      if(command) // if command = 1
 	{
-	  onebyte = fgetc(fptr);
-	  x = onebyte;
-	}
-      if(command)
-	{
-	  y = fgetc(fptr);
+	  // get the next byte but move the file cursor back for future use.
+	  y = fgetc(fptr);     
 	  fseek(fptr, -1, SEEK_CUR);
 	  
+	  // add right part of x and left part of y
 	  x<<=(cmdloc+1);
 	  y>>=(7-cmdloc);
 	  x=x|y;
 
+	  // create a HuffNode with the new x and push it on the stack
 	  HuffNode *a = HuffNode_create(x);
 	  st = Stack_push(st, a);
+
+	  // get the next byte, get next 2 bytes if command location is 7
 	  onebyte = fgetc(fptr);
 	  if(cmdloc==7)
 	    onebyte = fgetc(fptr);
 	  x = onebyte;
 	}
-      else // command = 0
+      else // if command = 0
 	{
+	  // get the first HuffNode and pop the stack node
 	  HuffNode * a = NULL;
 	  a = st->node;
 	  st = Stack_pop(st);
 	  if(st == NULL) return a;
 	  else
 	    {
+	      // if the the 0 node is a parent of two nodes, create a parent
+	      // and push it on the stack
 	      HuffNode *b = st->node;
 	      st = Stack_pop(st);
 	      HuffNode * par = malloc(sizeof(HuffNode));
@@ -64,44 +60,54 @@ HuffNode * Huffman_bit(FILE * fptr)
 	      par->left = b;
 	      st = Stack_push(st, par);
 	    }
+	  // special case if a 0 command is at the end of a byte
+	  if(cmdloc == 7)
+	    {
+	      onebyte = fgetc(fptr);
+	      x = onebyte;
+	    }
 	}
     }
   return NULL;
 }
 
+// function to create a Huffman tree for character input and return the head
 HuffNode * Huffman_char(FILE * fptr)
 {
+  // initialize variables
   int command=fgetc(fptr);
   int character=0;
   Stack * st = NULL; 
 
-  while(!feof(fptr)) // not end of tree 
+  while(!feof(fptr)) // while not end of tree 
     {
-      if(command == 49) // command is 1
+      if(command == 49) // if command is 1
 	{
+	  // get the character and push it on the stack
 	  character = fgetc(fptr);
 	  HuffNode *a = HuffNode_create(character);
 	  st = Stack_push(st, a);
 	}
-      else if(command == 48)
+      else if(command == 48) // if command is 0
 	{
+	  // pop the topmost node after getting it's HuffNode
 	  HuffNode *a = st->node;
 	  st = Stack_pop(st);
-	  if(st == NULL)
-	    {
-	      return a;
-	    }
+	  if(st == NULL) return a;
 	  else
 	    {
+	      // if the the 0 node is a parent of two nodes, create a parent
+	      // and push it on the stack
 	      HuffNode *b = st->node;
 	      st = Stack_pop(st);
 	      HuffNode * par = malloc(sizeof(HuffNode));
-	      par->value = ' '; // doesn't matter
+	      par->value = ' ';
 	      par->right = a;
 	      par->left = b;
 	      st = Stack_push(st, par);
 	    }
 	}
+      // get the next command
       command = fgetc(fptr);
     }
   return NULL;
@@ -109,6 +115,7 @@ HuffNode * Huffman_char(FILE * fptr)
 
 Stack * Stack_create(HuffNode * huff)
 {
+  // creates a Stack which references the given HuffNode and returns the new head
   Stack * st;
   st = malloc(sizeof(Stack));
   st -> node = huff;
@@ -118,6 +125,7 @@ Stack * Stack_create(HuffNode * huff)
 
 Stack * Stack_push(Stack *st, HuffNode * huff)
 {
+  // pushes the given HuffNode on the given Stack and returns the new head
   Stack * newNode = Stack_create(huff);
   newNode->next = st;
   newNode->node = huff;
@@ -126,6 +134,7 @@ Stack * Stack_push(Stack *st, HuffNode * huff)
 
 Stack * Stack_pop(Stack * st)
 {
+  // Pops the topmost element on the stack and returns the next element
   if (st == NULL) return NULL;
   Stack * b = st -> next;
   free (st);
@@ -134,6 +143,7 @@ Stack * Stack_pop(Stack * st)
 
 HuffNode * HuffNode_create(int value)
 {
+  // creates a HuffNode with the given value and returns its pointer
   HuffNode * huff = malloc(sizeof(HuffNode));
   huff -> value = value;
   huff -> left = NULL;
@@ -143,6 +153,7 @@ HuffNode * HuffNode_create(int value)
 
 void Huff_postOrderPrint(HuffNode *tree, FILE * fptr)
 {
+  // prints the HuffNode in POST-ORDER to the specified file pointer
   if (tree == NULL) return;
   fprintf(fptr, "Left\n");
   Huff_postOrderPrint(tree->left, fptr);
@@ -157,6 +168,7 @@ void Huff_postOrderPrint(HuffNode *tree, FILE * fptr)
 
 void HuffNode_destroy(HuffNode * huff)
 {
+  // destroys the given HuffNode and frees memory
   if(huff!=NULL)
     {
       HuffNode_destroy(huff->left);      
@@ -165,35 +177,26 @@ void HuffNode_destroy(HuffNode * huff)
     }
 }
 
+// FOLLOWED IS DEBUGGING CODE WRITTEN BY TA AARON MICHEUX
+
+/*
+void printByte(unsigned char b)
+{
+  int i;
+  for(i = 0; i < 8; ++i) {
+    printf("%d", (int)((b >> (7-i)) & 1));
+    if(i == 3)
+      printf("-");
+  }
+  printf(" ");
+}
+
 #ifdef MYTEST
 // gcc -Wall -Wshadow -g -DMYTEST utility.c && ./a.out
 int main(int argc, char * * argv)
 {
   const char * filename = "/tmp/binary";
   {
-    /*
- [1] 0001-1110 
- [1] 1101-1011 
- [1] 1111-1110 
- [1] 0111-1101 
- [1] 1110-0000 
- [1] 1111-0100 
- [1] 0000-1001 
- [1] 1000-1111 
-
- 
-
- [1] 0001-1110 
- [1] 1101-1011 
- [1] 1111-1110 
- [1] 0111-1101 
- [1] 1110-0000 
- [1] 1111-0100 
- [1] 0000-1001 
- [1] 0000-0000 
-
-     */
-
     FILE * fp = fopen(filename, "wb");
     unsigned char bits[] = { 0b10001111, 
 			     0b01110110, 
@@ -237,3 +240,4 @@ int main(int argc, char * * argv)
 
 #endif
 
+*/

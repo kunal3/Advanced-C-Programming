@@ -1,3 +1,4 @@
+#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "pa09.h"
@@ -18,9 +19,16 @@ int main(int argc, char** argv)
     }
   
   HuffNode * array = NULL;
-  array = Huffman_char(fptr);
+
+  // checks if input is binary or character
+  if(strstr(argv[1], "_ch")!=NULL)
+    array = Huffman_char(fptr);
+  else if(strstr(argv[1], "_bit")!=NULL)
+    array = Huffman_bit(fptr);
+
   fclose(fptr);
   
+  // opens the file to write output
   fptr = fopen(argv[2], "w");
   if (fptr == NULL)
     {
@@ -28,9 +36,11 @@ int main(int argc, char** argv)
       return EXIT_FAILURE;
     }
 
+  // prints the array in post order to the file
   Huff_postOrderPrint(array, fptr);
 
   fclose(fptr);
+  // frees memory
   HuffNode_destroy(array);
 
   return EXIT_SUCCESS;
