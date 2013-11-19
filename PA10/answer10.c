@@ -8,12 +8,24 @@
 #define TRUE 1
 #define FALSE 0
 
+void List_destroy(ListNode * list)
+{
+  if(list != NULL)
+    {
+      List_destroy(list->next);
+      free(list);
+    }
+}
+
 /**
  * Returns a pointer to a new empty stack.
  */
 Stack * Stack_create()
 {
-    return NULL;
+  Stack *stack = NULL;
+  stack = malloc(sizeof(Stack));
+  stack->list = NULL;
+  return stack;
 }
 
 /**
@@ -23,15 +35,21 @@ Stack * Stack_create()
  */
 void Stack_destroy(Stack * stack)
 {
-
+  if(stack == NULL) return;
+  List_destroy(stack->list);
+  free(stack);
 }
+
 
 /**
  * Returns TRUE (something other than zero) if the stack is empty.
  */
 int Stack_isEmpty(Stack * stack)
 {
-    return FALSE;
+  // if no stack exists or if theres no linked list in it (list == NULL)?
+  // if(stack == NULL) return TRUE;
+  if(stack->list == NULL) return TRUE;
+  return FALSE;
 }
 
 /**
@@ -43,7 +61,14 @@ int Stack_isEmpty(Stack * stack)
  */
 int Stack_pop(Stack * stack)
 {
-    return -1;
+  // is value returned the popped value, or the value of the new head?
+  if(stack->list == NULL) return -1;
+  int value = stack->list->value;
+  ListNode * newList = NULL;
+  newList = stack->list->next;
+  free(stack->list);
+  stack->list = newList;
+  return value;
 }
 
 /**
@@ -55,7 +80,11 @@ int Stack_pop(Stack * stack)
  */
 void Stack_push(Stack * stack, int value)
 {
-
+  ListNode * newList = NULL;
+  newList = malloc(sizeof(ListNode));
+  newList->value = value;
+  newList->next = stack->list;
+  stack->list = newList;
 }
 
 /**
@@ -80,7 +109,18 @@ void Stack_push(Stack * stack, int value)
  */
 void stackSort(int * array, int len)
 {
-
+  int wIndex = 0;
+  int i = 0;
+  Stack *stack = NULL;
+  stack = Stack_create();
+  for(i=0; i<len; i++)
+    {
+      while(!Stack_isEmpty(stack) && array[i]>stack->list->value)
+	array[wIndex++] = Stack_pop(stack);
+      Stack_push(stack, array[i]);
+    }
+  while(!Stack_isEmpty(stack))
+    array[wIndex++] = Stack_pop(stack);
 }
 
 /**
