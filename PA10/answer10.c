@@ -46,8 +46,7 @@ void Stack_destroy(Stack * stack)
  */
 int Stack_isEmpty(Stack * stack)
 {
-  // if no stack exists or if theres no linked list in it (list == NULL)?
-  // if(stack == NULL) return TRUE;
+  // precondition - stack cannot be NULL
   if(stack->list == NULL) return TRUE;
   return FALSE;
 }
@@ -61,7 +60,6 @@ int Stack_isEmpty(Stack * stack)
  */
 int Stack_pop(Stack * stack)
 {
-  // is value returned the popped value, or the value of the new head?
   if(stack->list == NULL) return -1;
   int value = stack->list->value;
   ListNode * newList = NULL;
@@ -141,7 +139,39 @@ void stackSort(int * array, int len)
  */
 int isStackSortable(int * array, int len)
 {
-    return FALSE;
+  if (len<3) return TRUE;
+  int max = array[0];
+  int maxL = array[0];
+  int minR = 0;
+  int i = 0;
+  int ind = 0;
+
+  for(i=1; i<len; i++)
+    if(array[i]>max)
+      {
+	max = array[i];
+	ind = i;
+      }
+
+  if(ind==0) return TRUE; // if left does not exist, this is wrong, ask aaron
+  // example 4231 is unsortable
+
+  for(i=0; i<ind; i++)
+    if(array[i]>maxL)
+      maxL=array[i];
+
+  if(ind<len-1)
+    minR = array[ind+1];
+  else if (array[ind] > maxL) return TRUE; // if right doesnt not exist, this might be wrong
+  else return FALSE;
+  
+  for(i=ind+1; i<len; i++)
+    if(array[i]<minR)
+      minR = array[i];
+  
+  if(maxL<minR) return TRUE;
+
+  return FALSE;
 }
 
 /**
@@ -161,7 +191,10 @@ int isStackSortable(int * array, int len)
  */
 void genShapes(int k)
 {
-
+  int array[] = malloc(sizeof(int)*k);
+  int i=0;
+  for(i=0; i<k; i++)
+    array[i]=i;
 }
 
 
