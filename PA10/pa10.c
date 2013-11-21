@@ -119,24 +119,28 @@ int main(int argc, char * * argv)
     else if(strcmp(cmd, "test-sortable") == 0) 
       {
 	const char * filename = argv[2];
+
+	int length = strlen(filename);
+	length = filename[length-1]-'0';
+
 	FILE * fptr = fopen(filename, "r");
-	int * array1 = malloc(sizeof(int) * 6);
-	int i = 0;
-	int len = 5;
+	int * array1 = malloc(sizeof(int) * length);
+	int j = 0;
 
 	while(!feof(fptr))
 	  {
-	    for(i=0; i<len; i++)
+	    for(j=0; j<length; j++)
 	      {
-		array1[i] = fgetc(fptr)-'0';
-		printf("%d",array1[i]);
+		array1[j] = fgetc(fptr)-'0';
+		//printf("%d",array1[j]);
 	      }
-	    if(isStackSortable(array1, len))
-	      printf(" Y\n");
+	    if(isStackSortable(array1, length))
+	      printf("Y\n");
 	    else
-	      printf(" N\n");
+	      printf("");
 	    array1[0]=fgetc(fptr);
 	  }
+	free(array1);
 	fclose(fptr);
       }
     else 
