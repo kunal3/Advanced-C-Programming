@@ -76,7 +76,7 @@ int main(int argc, char * * argv)
 
     if(strcmp(cmd, "sort") == 0 || strcmp(cmd, "sortable") == 0) 
 	{
-	    const char * arrstr = argv[2];
+	    char * arrstr = argv[2];
 	    if(!checkArrayStr(arrstr)) 
 		{
 		    fprintf(stderr, "Invalid array, aborting\n");
@@ -116,6 +116,29 @@ int main(int argc, char * * argv)
 		    genShapes(len);
 		}
 	}
+    else if(strcmp(cmd, "test-sortable") == 0) 
+      {
+	const char * filename = argv[2];
+	FILE * fptr = fopen(filename, "r");
+	int * array1 = malloc(sizeof(int) * 6);
+	int i = 0;
+	int len = 5;
+
+	while(!feof(fptr))
+	  {
+	    for(i=0; i<len; i++)
+	      {
+		array1[i] = fgetc(fptr)-'0';
+		printf("%d",array1[i]);
+	      }
+	    if(isStackSortable(array1, len))
+	      printf(" Y\n");
+	    else
+	      printf(" N\n");
+	    array1[0]=fgetc(fptr);
+	  }
+	fclose(fptr);
+      }
     else 
 	{
 	    fprintf(stderr, "Invalid command: '%s', aborting\n", cmd);
