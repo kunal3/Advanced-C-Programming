@@ -137,41 +137,47 @@ void stackSort(int * array, int len)
  * sequence in the sortable files, and you must return FALSE for every
  * sequence in the unsortable files.
  */
-int isStackSortable(int * array, int len)
+
+int isSortable(int *array,int bottom, int len)
 {
-  if (len<3) return TRUE;
-  int max = array[0];
-  int maxL = array[0];
+  if ((len-bottom)<3) return TRUE;
+  int max = array[bottom];
+  int maxL = array[bottom];
   int minR = 0;
   int i = 0;
-  int ind = 0;
+  int ind = bottom;
 
-  for(i=1; i<len; i++)
+  for(i=bottom; i<len; i++)
     if(array[i]>max)
       {
 	max = array[i];
 	ind = i;
       }
 
-  if(ind==0) return TRUE; // if left does not exist, this is wrong, ask aaron
-  // example 4231 is unsortable
+  if(ind==bottom) return isSortable(array, bottom+1, len);
+  else
+    {
+      for(i=bottom; i<ind; i++)
+	if(array[i]>maxL)
+	  maxL=array[i];
+      
+      if(ind<len-1)
+	minR = array[ind+1];
+      else if (array[ind] > maxL) return isSortable(array, bottom, ind);
+      else return FALSE;
+      
+      for(i=ind+1; i<len; i++)
+	if(array[i]<minR)
+	  minR = array[i];
+      
+      if(maxL<minR) return (isSortable(array,0,ind) && isSortable(array, ind+1,len));
+      else return FALSE;
+    }
+}
 
-  for(i=0; i<ind; i++)
-    if(array[i]>maxL)
-      maxL=array[i];
-
-  if(ind<len-1)
-    minR = array[ind+1];
-  else if (array[ind] > maxL) return TRUE; // if right doesnt not exist, this might be wrong
-  else return FALSE;
-  
-  for(i=ind+1; i<len; i++)
-    if(array[i]<minR)
-      minR = array[i];
-  
-  if(maxL<minR) return TRUE;
-
-  return FALSE;
+int isStackSortable(int * array, int len)
+{
+  return isSortable(array,0,len);
 }
 
 /**
@@ -189,14 +195,40 @@ int isStackSortable(int * array, int len)
  * The correct outputs for sizes [1..9] are in the 'expected' 
  * directory.
  */
+
+void swap(int *array, int a, int b)
+{
+  array[a]=array[a]+array[b];
+  array[b]=array[a]-array[b];
+  array[a]=array[a]-array[b];
+}
+
+void permute(int * array, int pos, int len)
+{
+  if(isStackSortable(array, len))
+    {
+      printf("base case\n");
+      // create a binary tree and print it
+    }
+  else
+    {
+      int i=0;
+      for(i=pos; i< len ;i++)
+	{
+	  swap(array, 0,i);
+	  permute(array, pos+1, len);
+	  swap(array, i,0);
+	}
+    }
+}
+
 void genShapes(int k)
 {
-  int array[] = malloc(sizeof(int)*k);
+  int *array = malloc(sizeof(int)*k);
   int i=0;
   for(i=0; i<k; i++)
     array[i]=i;
+
+  permute(array, 0, k);
 }
-
-
-
 
