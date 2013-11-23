@@ -62,7 +62,7 @@ int checkArrayStr(const char * str)
 
 int main(int argc, char * * argv)
 {
-    if(argc != 3) 
+    if(argc != 4) 
 	{
 	    printUsage(argv[0]);
 	    return EXIT_FAILURE;
@@ -113,9 +113,17 @@ int main(int argc, char * * argv)
 		} 
 	    else 
 		{
-		    genShapes(len);
+
+		  // inserted code
+		  FILE * fptr = fopen(argv[3],"w");
+		  genShapes(len, fptr);
+		  fclose(fptr);
+		  // end of inserted code
+
 		}
 	}
+
+    // inserted code
     else if(strcmp(cmd, "test-sortable") == 0) 
       {
 	const char * filename = argv[2];
@@ -130,19 +138,20 @@ int main(int argc, char * * argv)
 	while(!feof(fptr))
 	  {
 	    for(j=0; j<length; j++)
-	      {
 		array1[j] = fgetc(fptr)-'0';
-		//printf("%d",array1[j]);
-	      }
-	    if(isStackSortable(array1, length))
-	      printf("Y\n");
-	    else
-	      printf("");
+	    if(array1[0]>-1){
+	      if(isStackSortable(array1, length))
+		printf("Y\n");
+	      else
+		printf("");
+	    }
 	    array1[0]=fgetc(fptr);
 	  }
 	free(array1);
 	fclose(fptr);
       }
+    // end inserted code
+
     else 
 	{
 	    fprintf(stderr, "Invalid command: '%s', aborting\n", cmd);
