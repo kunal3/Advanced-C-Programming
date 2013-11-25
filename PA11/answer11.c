@@ -218,8 +218,6 @@ void MoveTree_destroy(MoveTree * node)
   if(node == NULL) return;
   MoveTree_destroy(node->left);
   MoveTree_destroy(node->right);
-  free(node->state);
-  free(node->moves);
   free(node);
 }
 
@@ -232,7 +230,23 @@ void MoveTree_destroy(MoveTree * node)
 MoveTree * MoveTree_insert(MoveTree * node, const char * state,
 			   const char * moves)
 {
-    return NULL;
+  if(node == NULL)
+    return MoveTree_create(state, moves);
+  
+  if(strcmp(node->state, state) == 0)
+    if(strlen(moves) < strlen(node->moves))
+      node->state = state;
+  
+  if(strcmp(node->state, state) > 0)
+    return MoveTree_insert(node->left, state, moves);
+  else return MoveTree_insert(node->right, state, moves);
+
+  // where do i insert? left right?
+  // do i FIND the state in our tree first?
+  // left or right based on comparision?
+  // MY CURRENT CODE ANSWERS ALL THESE QUESTIONS,
+  // JUST SEE IF YOURE RIGHT
+  return NULL;
 }
 
 /**
@@ -241,11 +255,15 @@ MoveTree * MoveTree_insert(MoveTree * node, const char * state,
  */
 MoveTree * MoveTree_find(MoveTree * node, const char * state)
 {
-  if(strcmp(node->state,state) == 0)
+
+  // ASSUMING TREE IS IN ORDER, SO INSERT THAT WAY?
+  // check if right
+
+  if(strcmp(node->state, state) == 0)
     return node;
   if(node == NULL) return NULL;
-  //  MoveTree_find(node->left, state);
-  //MoveTree_find(node->right, state);
+  if(strcmp(node->state, state) > 0) return MoveTree_find(node->left, state);
+  else return MoveTree_find(node->right, state);
   return NULL;
 }
 
@@ -344,6 +362,6 @@ int main(int argc, char * * argv)
 
   MoveTree * tree = MoveTree_create(state, moveList);
   MoveTree_destroy( tree );
-
+  tree = MoveTree_find(tree, )
   return 0;
 }
