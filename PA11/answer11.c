@@ -5,6 +5,18 @@
 #include <stdlib.h>
 #include <string.h>
 
+/* constants:
+#define TRUE 1
+#define FALSE 0
+
+// 4x4 puzzle
+#define SIDELENGTH 4
+#define FINAL_STATE "123456789ABCDEF-"
+
+#define MAX_SEARCH_DEPTH 9
+ */
+
+
 /**
             IMPORTANT INFORMATION
   
@@ -34,8 +46,7 @@ int main(int argc, char * * argv)
    return 0;
 }
 
- */
-
+**/
 
 /** 
  * Return TRUE iff 'state' is a valid puzzle state.
@@ -50,9 +61,19 @@ int main(int argc, char * * argv)
  * (2) Sort the characters in your buffer. (Use qsort.)
  * (3) Check that buffer is equal to "-123456789ABCDEF"
  */
+ 
+int compare (const void *a, const void *b)
+{ 
+  return (*(char*)a - *(char*)b);
+}
+
 int isValidState(const char * state)
 {
-    return 0;
+  if(strlen(state) != 16) return FALSE;
+  const char * buffer = strdup(state);
+  qsort(buffer, 16, sizeof(char), compare);
+  if(strcmp(buffer, "-123456789ABCDEF")==0) return TRUE;
+  return FALSE;
 }
 
 /** 
@@ -63,7 +84,12 @@ int isValidState(const char * state)
  */ 
 int isValidMoveList(const char * moves)
 {
-    return 0;
+  int i = 0;
+  int check = TRUE;
+  for(i=0; i< strlen(moves) && check; i++)
+    if(!(moves[i]=='R') && !(moves[i]=='L') && !(moves[i]=='U') && !(moves[i]=='D'))
+      check = FALSE;
+  return check;
 }
 
 /**
@@ -106,9 +132,44 @@ void printPuzzle(const char * state)
  *     be 'new_row * SIDELENGTH + new_col'
  * (5) Swap the characters at 'position' and 'target_position'
  */
+
+void swapChar(char *a, char *b)
+{
+  char temp = *a;
+  *a = *b;
+  *b = temp;
+}
+
 int move(char * state, char m)
 {    
-    return TRUE;
+  int pos_cursor = 0;
+  int row_cursor = 0;
+  int col_cursor = 0;
+  int target_pos = 0;
+  int i = 0;
+  for(i=0; i<16; i++)
+    if(state[i]=='-')
+      pos_cursor = i;
+  row_cursor = (pos_cursor / SIDELENGTH);
+  col_cursor = (pos_cursor % SIDELENGTH);
+
+  if(m == 'U') row_cursor--;
+  if(m == 'D') row_cursor++;
+  if(m == 'L') col_cursor--;
+  if(m == 'R') col_cursor++;
+  
+  if(row_cursor<0 || row_cursor >= SIDELENGTH || col_cursor < 0 || col_cursor >= SIDELENGTH)
+    return FALSE;
+ 
+  target_pos = row_cursor * SIDELENGTH + col_cursor;
+  swapChar(&state[pos_cursor], &state[target_pos]);
+  /*
+  char temp = state[pos_cursor];
+  char temp2 = state[target_pos];
+  state[pos_cursor] = temp2;
+  state[target_pos] = temp; 
+  */
+  return TRUE;
 }
 
 /**
@@ -124,9 +185,16 @@ int move(char * state, char m)
  * (2) If you never failed in (1), then print the final state on a 
  *     single line.
  */
+
 void processMoveList(char * state, const char * movelist)
 {
-
+  int i = 0;
+  for(i = 0; i< strlen(movelist); i++)
+    {
+      if(move(state, movelist[i]) == 1)
+	printf("%s\n",state);
+      else printf("I\n");
+    }
 }
 
 /**
@@ -134,7 +202,12 @@ void processMoveList(char * state, const char * movelist)
  */
 MoveTree * MoveTree_create(const char * state, const char * moves)
 {
-    return NULL;
+  MoveTree *tree = malloc(sizeof(MoveTree));
+  tree->state = state;
+  tree->moves = moves;
+  tree->left = NULL;
+  tree->right = NULL;
+  return tree;
 }
 
 /**
@@ -142,7 +215,12 @@ MoveTree * MoveTree_create(const char * state, const char * moves)
  */
 void MoveTree_destroy(MoveTree * node)
 {
-    
+  if(node == NULL) return;
+  MoveTree_destroy(node->left);
+  MoveTree_destroy(node->right);
+  free(node->state);
+  free(node->moves);
+  free(node);
 }
 
 /**
@@ -163,7 +241,12 @@ MoveTree * MoveTree_insert(MoveTree * node, const char * state,
  */
 MoveTree * MoveTree_find(MoveTree * node, const char * state)
 {
-  
+  if(strcmp(node->state,state) == 0)
+    return node;
+  if(node == NULL) return NULL;
+  //  MoveTree_find(node->left, state);
+  //MoveTree_find(node->right, state);
+  return NULL;
 }
 
 /**
@@ -244,3 +327,23 @@ char * solve(char * state)
     return NULL;
 }
 
+
+// MAIN TO RUN
+// gcc -Wall -Wshadow -g answer11.c && ./a.out
+
+int main(int argc, char * * argv)
+{
+  char * state = strdup("123456789AFBDE-C");
+  char * moveList = "UUU";
+  printf("Valid state: %d\n",isValidState(state));
+  printf("Valid move list: %d\n", isValidMoveList(moveList));
+  printPuzzle(state);
+  printf("Move: %d\n", move(state, 'U'));
+  processMoveList(state, moveList);
+  printPuzzle(state);
+
+  MoveTree * tree = MoveTree_create(state, moveList);
+  MoveTree_destroy( tree );
+
+  return 0;
+}
