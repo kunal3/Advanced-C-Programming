@@ -300,27 +300,57 @@ void MoveTree_print(MoveTree * node)
  * This is the most complex function to write... make sure you break
  * it down, and TEST EACH PART.
  */
-MoveTree * generateAll(char * state, int n_moves)
-{
-  char * moveList = malloc(sizeof(char)*(n_moves+1));
-  MoveTree * root = MoveTree_create(state, moveList);
-
-  return NULL;
-}
 
 void generateAllHelper(MoveTree * root, int n_moves, const char * state,
 		       char * moveList, int ind)
 {
   if(ind == n_moves) return;
   
-  char * dup_state = strdup(state);
-  if(move(dup_state, moveList[ind++]) == 1)
-    {
-      root = MoveTree_insert(root, dup_state, moveList);
-      memmove(moveList, moveList+1, strlen(moveList));
+  int move_counter = 0;
+  while(move_counter != 4)
+    {  
+      char * dup_state = strdup(state);
+      if(move_counter == 0)
+	{
+	  moveList[ind] = 'U';
+	  moveList[ind+1]='\0';
+	}
+      if(move_counter == 1)
+	{
+	  moveList[ind] = 'D';	  
+	  moveList[ind+1]='\0';
+	}
+      if(move_counter == 2)
+	{
+	  moveList[ind] = 'L';
+	  moveList[ind+1]='\0';
+	}
+      if(move_counter == 3)
+	{
+	  moveList[ind] = 'R';
+	  moveList[ind+1]='\0';
+	  ind++;
+	}
+
+      if(move(dup_state, moveList[ind]) == 1)
+	{
+	  root = MoveTree_insert(root, dup_state, moveList);
+	  memmove(moveList, moveList+1, strlen(moveList));
+	}
+      move_counter++;
+      generateAllHelper(root, n_moves, dup_state, moveList, ind);
+      free(dup_state);
     }
-  generateAllHelper(root, n_moves, dup_state, moveList, ind);
-  free(dup_state);
+}
+
+MoveTree * generateAll(char * state, int n_moves)
+{
+  char * moveList = malloc(sizeof(char)*(n_moves+1));
+  MoveTree * root = MoveTree_create(state, moveList);
+
+  generateAllHelper(root, n_moves, state, moveList, 0);
+
+  return root;
 }
 
 /**
@@ -344,11 +374,10 @@ char * solve(char * state)
 int main(int argc, char * * argv)
 {
   char * state = strdup("123-456789AFBDEC");
-  char * moveList = strdup("UUU");
-  
-  printPuzzle(state);
-  
-  MoveTree * tree = MoveTree_create(state, moveList);
+    
+  MoveTree * tree = generateAll(state, 1);
+  MoveTree_print(tree);
+  MoveTree_destroy(tree);
 
   return 0;
 }
