@@ -5,18 +5,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-/* constants:
-#define TRUE 1
-#define FALSE 0
-
-// 4x4 puzzle
-#define SIDELENGTH 4
-#define FINAL_STATE "123456789ABCDEF-"
-
-#define MAX_SEARCH_DEPTH 9
- */
-
-
 /**
             IMPORTANT INFORMATION
   
@@ -163,12 +151,6 @@ int move(char * state, char m)
  
   target_pos = row_cursor * SIDELENGTH + col_cursor;
   swapChar(&state[pos_cursor], &state[target_pos]);
-  /*
-  char temp = state[pos_cursor];
-  char temp2 = state[target_pos];
-  state[pos_cursor] = temp2;
-  state[target_pos] = temp; 
-  */
   return TRUE;
 }
 
@@ -230,23 +212,17 @@ void MoveTree_destroy(MoveTree * node)
 MoveTree * MoveTree_insert(MoveTree * node, const char * state,
 			   const char * moves)
 {
-  if(node == NULL)
-    return MoveTree_create(state, moves);
+  if(node == NULL) return MoveTree_create(state, moves);
   
   if(strcmp(node->state, state) == 0)
     if(strlen(moves) < strlen(node->moves))
       node->state = state;
   
   if(strcmp(node->state, state) > 0)
-    return MoveTree_insert(node->left, state, moves);
-  else return MoveTree_insert(node->right, state, moves);
-
-  // where do i insert? left right?
-  // do i FIND the state in our tree first?
-  // left or right based on comparision?
-  // MY CURRENT CODE ANSWERS ALL THESE QUESTIONS,
-  // JUST SEE IF YOURE RIGHT
-  return NULL;
+    node->left = MoveTree_insert(node->left, state, moves);
+  else
+    node->right = MoveTree_insert(node->right, state, moves);
+  return node;
 }
 
 /**
@@ -255,10 +231,6 @@ MoveTree * MoveTree_insert(MoveTree * node, const char * state,
  */
 MoveTree * MoveTree_find(MoveTree * node, const char * state)
 {
-
-  // ASSUMING TREE IS IN ORDER, SO INSERT THAT WAY?
-  // check if right
-
   if(strcmp(node->state, state) == 0)
     return node;
   if(node == NULL) return NULL;
@@ -275,7 +247,7 @@ void MoveTree_print(MoveTree * node)
 {
     if(node == NULL)
 	return;
-    printf("%s\n", node -> state);
+    printf("%s %s\n", node -> state, node -> moves);
     MoveTree_print(node -> left);
     MoveTree_print(node -> right);
 }
@@ -329,8 +301,26 @@ void MoveTree_print(MoveTree * node)
  * it down, and TEST EACH PART.
  */
 MoveTree * generateAll(char * state, int n_moves)
-{ 
-    return NULL;
+{
+  char * moveList = malloc(sizeof(char)*(n_moves+1));
+  MoveTree * root = MoveTree_create(state, moveList);
+
+  return NULL;
+}
+
+void generateAllHelper(MoveTree * root, int n_moves, const char * state,
+		       char * moveList, int ind)
+{
+  if(ind == n_moves) return;
+  
+  char * dup_state = strdup(state);
+  if(move(dup_state, moveList[ind++]) == 1)
+    {
+      root = MoveTree_insert(root, dup_state, moveList);
+      memmove(moveList, moveList+1, strlen(moveList));
+    }
+  generateAllHelper(root, n_moves, dup_state, moveList, ind);
+  free(dup_state);
 }
 
 /**
@@ -342,26 +332,23 @@ MoveTree * generateAll(char * state, int n_moves)
  */
 char * solve(char * state)
 {
-    return NULL;
+  MoveTree * tree = generateAll(state, MAX_SEARCH_DEPTH);
+  if(MoveTree_find(tree, FINAL_STATE) == NULL) return NULL;
+  else return MoveTree_find(tree, FINAL_STATE)->moves;
 }
 
-
+// -------------------------------------------------------------------
 // MAIN TO RUN
 // gcc -Wall -Wshadow -g answer11.c && ./a.out
 
 int main(int argc, char * * argv)
 {
-  char * state = strdup("123456789AFBDE-C");
-  char * moveList = "UUU";
-  printf("Valid state: %d\n",isValidState(state));
-  printf("Valid move list: %d\n", isValidMoveList(moveList));
+  char * state = strdup("123-456789AFBDEC");
+  char * moveList = strdup("UUU");
+  
   printPuzzle(state);
-  printf("Move: %d\n", move(state, 'U'));
-  processMoveList(state, moveList);
-  printPuzzle(state);
-
+  
   MoveTree * tree = MoveTree_create(state, moveList);
-  MoveTree_destroy( tree );
-  tree = MoveTree_find(tree, )
+
   return 0;
 }
