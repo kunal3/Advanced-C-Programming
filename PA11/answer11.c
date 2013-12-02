@@ -58,7 +58,7 @@ int compare (const void *a, const void *b)
 int isValidState(const char * state)
 {
   if(strlen(state) != 16) return FALSE;
-  const char * buffer = strdup(state);
+  char * buffer = strdup(state);
   qsort(buffer, 16, sizeof(char), compare);
   if(strcmp(buffer, "-123456789ABCDEF")==0) return TRUE;
   return FALSE;
@@ -185,8 +185,8 @@ void processMoveList(char * state, const char * movelist)
 MoveTree * MoveTree_create(const char * state, const char * moves)
 {
   MoveTree *tree = malloc(sizeof(MoveTree));
-  tree->state = state;
-  tree->moves = moves;
+  tree->state = strdup(state);
+  tree->moves = strdup(moves);
   tree->left = NULL;
   tree->right = NULL;
   return tree;
@@ -200,6 +200,8 @@ void MoveTree_destroy(MoveTree * node)
   if(node == NULL) return;
   MoveTree_destroy(node->left);
   MoveTree_destroy(node->right);
+  free(node->state);
+  free(node->moves);
   free(node);
 }
 
@@ -214,11 +216,15 @@ MoveTree * MoveTree_insert(MoveTree * node, const char * state,
 {
   if(node == NULL) return MoveTree_create(state, moves);
   
-  if(strcmp(node->state, state) == 0)
-    if(strlen(moves) < strlen(node->moves))
-      node->state = state;
-  
-  if(strcmp(node->state, state) > 0)
+  if(strcmp(node->state, state) == 0) 
+    {
+      if(strlen(moves) < strlen(node->moves))
+	{
+	  free(node->moves);
+	  node->moves = strdup(moves);
+	}
+    }
+  else if(strcmp(node->state, state) > 0)
     node->left = MoveTree_insert(node->left, state, moves);
   else
     node->right = MoveTree_insert(node->right, state, moves);
@@ -231,9 +237,8 @@ MoveTree * MoveTree_insert(MoveTree * node, const char * state,
  */
 MoveTree * MoveTree_find(MoveTree * node, const char * state)
 {
-  if(strcmp(node->state, state) == 0)
-    return node;
   if(node == NULL) return NULL;
+  if(strcmp(node->state, state) == 0) return node;
   if(strcmp(node->state, state) > 0) return MoveTree_find(node->left, state);
   else return MoveTree_find(node->right, state);
   return NULL;
@@ -329,16 +334,14 @@ void generateAllHelper(MoveTree * root, int n_moves, const char * state,
 	{
 	  moveList[ind] = 'R';
 	  moveList[ind+1]='\0';
-	  ind++;
 	}
 
       if(move(dup_state, moveList[ind]) == 1)
 	{
 	  root = MoveTree_insert(root, dup_state, moveList);
-	  memmove(moveList, moveList+1, strlen(moveList));
 	}
       move_counter++;
-      generateAllHelper(root, n_moves, dup_state, moveList, ind);
+      generateAllHelper(root, n_moves, dup_state, moveList, ind+1);
       free(dup_state);
     }
 }
@@ -363,21 +366,24 @@ MoveTree * generateAll(char * state, int n_moves)
 char * solve(char * state)
 {
   MoveTree * tree = generateAll(state, MAX_SEARCH_DEPTH);
-  if(MoveTree_find(tree, FINAL_STATE) == NULL) return NULL;
-  else return MoveTree_find(tree, FINAL_STATE)->moves;
+  MoveTree * found = MoveTree_find(tree, FINAL_STATE);
+
+  if(found == NULL) return NULL;
+  else return found->moves;
 }
 
 // -------------------------------------------------------------------
 // MAIN TO RUN
 // gcc -Wall -Wshadow -g answer11.c && ./a.out
+// gcc -Wall -Wshadow -g answer11.c && ./a.out | awk '{ print $1 }' | sort
 
 int main(int argc, char * * argv)
 {
-  char * state = strdup("123-456789AFBDEC");
+  char * state = strdup("-23416785ABC9DEF");
     
-  MoveTree * tree = generateAll(state, 1);
-  MoveTree_print(tree);
-  MoveTree_destroy(tree);
+  printf("Solution: %s\n",solve(state)); 
+
+  free(state);
 
   return 0;
 }
