@@ -60,7 +60,11 @@ int isValidState(const char * state)
   if(strlen(state) != 16) return FALSE;
   char * buffer = strdup(state);
   qsort(buffer, 16, sizeof(char), compare);
-  if(strcmp(buffer, "-123456789ABCDEF")==0) return TRUE;
+  if(strcmp(buffer, "-123456789ABCDEF")==0)
+    {
+      free(buffer);
+      return TRUE;
+    }
   return FALSE;
 }
 
@@ -171,12 +175,18 @@ int move(char * state, char m)
 void processMoveList(char * state, const char * movelist)
 {
   int i = 0;
-  for(i = 0; i< strlen(movelist); i++)
+  int check = 1;
+  for(i = 0; i< strlen(movelist) && check; i++)
     {
       if(move(state, movelist[i]) == 1)
-	printf("%s\n",state);
-      else printf("I\n");
+	check = 1;
+      else 
+	{
+	  check = 0;
+	  printf("I\n");
+	}
     }
+  if(check == 1) printf("%s\n",state);
 }
 
 /**
@@ -250,9 +260,8 @@ MoveTree * MoveTree_find(MoveTree * node, const char * state)
  */
 void MoveTree_print(MoveTree * node)
 {
-    if(node == NULL)
-	return;
-    printf("%s %s\n", node -> state, node -> moves);
+    if(node == NULL) return;
+    printf("%s\n", node -> state);
     MoveTree_print(node -> left);
     MoveTree_print(node -> right);
 }
@@ -350,9 +359,10 @@ MoveTree * generateAll(char * state, int n_moves)
 {
   char * moveList = malloc(sizeof(char)*(n_moves+1));
   MoveTree * root = MoveTree_create(state, moveList);
-
+  
   generateAllHelper(root, n_moves, state, moveList, 0);
-
+  
+  free(moveList);
   return root;
 }
 
@@ -368,22 +378,14 @@ char * solve(char * state)
   MoveTree * tree = generateAll(state, MAX_SEARCH_DEPTH);
   MoveTree * found = MoveTree_find(tree, FINAL_STATE);
 
+  //MoveTree_destroy(tree);
+
   if(found == NULL) return NULL;
-  else return found->moves;
+  return found->moves;
 }
 
 // -------------------------------------------------------------------
 // MAIN TO RUN
 // gcc -Wall -Wshadow -g answer11.c && ./a.out
 // gcc -Wall -Wshadow -g answer11.c && ./a.out | awk '{ print $1 }' | sort
-
-int main(int argc, char * * argv)
-{
-  char * state = strdup("-23416785ABC9DEF");
-    
-  printf("Solution: %s\n",solve(state)); 
-
-  free(state);
-
-  return 0;
-}
+// valgrind --tool=memcheck --leak-check=full --verbose ./pa11 2 123-456789AFBDEC 1
