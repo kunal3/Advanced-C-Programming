@@ -389,3 +389,5 @@ char * solve(char * state)
 // gcc -Wall -Wshadow -g answer11.c && ./a.out
 // gcc -Wall -Wshadow -g answer11.c && ./a.out | awk '{ print $1 }' | sort
 // valgrind --tool=memcheck --leak-check=full --verbose ./pa11 2 123-456789AFBDEC 1
+
+// fails    ./pa11 2 FEDCBA987-654321 4
