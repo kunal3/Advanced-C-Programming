@@ -346,9 +346,8 @@ void generateAllHelper(MoveTree * root, int n_moves, const char * state,
 	}
 
       if(move(dup_state, moveList[ind]) == 1)
-	{
 	  root = MoveTree_insert(root, dup_state, moveList);
-	}
+
       move_counter++;
       generateAllHelper(root, n_moves, dup_state, moveList, ind+1);
       free(dup_state);
@@ -359,6 +358,8 @@ MoveTree * generateAll(char * state, int n_moves)
 {
   char * moveList = malloc(sizeof(char)*(n_moves+1));
   MoveTree * root = MoveTree_create(state, moveList);
+  
+  //moveList[0] = '\0';
   
   generateAllHelper(root, n_moves, state, moveList, 0);
   
@@ -386,8 +387,8 @@ char * solve(char * state)
 
 // -------------------------------------------------------------------
 // MAIN TO RUN
-// gcc -Wall -Wshadow -g answer11.c && ./a.out
+// gcc -Wall -Wshadow -g answer11.c
 // gcc -Wall -Wshadow -g answer11.c && ./a.out | awk '{ print $1 }' | sort
-// valgrind --tool=memcheck --leak-check=full --verbose ./pa11 2 123-456789AFBDEC 1
 
-// fails    ./pa11 2 FEDCBA987-654321 4
+// valgrind --tool=memcheck --leak-check=full --verbose ./pa11 2 123-456789AFBDEC 1
+// valgrind --tool=memcheck --leak-check=full --verbose --track-origins=yes ./pa11 2 123-456789AFBDEC 1DDD
