@@ -1,12 +1,15 @@
 
 #include "pa10.h"
 #include "tree.h"
+#include "tree.c"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #define TRUE 1
 #define FALSE 0
+
+// valgrind --leak-check=full --verbose --log-file=valgrind_log ./pa10
 
 void List_destroy(ListNode * list)
 {
@@ -119,6 +122,7 @@ void stackSort(int * array, int len)
     }
   while(!Stack_isEmpty(stack))
     array[wIndex++] = Stack_pop(stack);
+  Stack_destroy(stack);
 }
 
 /**
@@ -196,29 +200,31 @@ int isStackSortable(int * array, int len)
  * directory.
  */
 
-void swap(int *array, int a, int b)
+void swap( int *a, int *b)
 {
-  array[a]=array[a]+array[b];
-  array[b]=array[a]-array[b];
-  array[a]=array[a]-array[b];
+  int x = *a;
+  *a = *b;
+  *b = x;
 }
 
 void permute(int * array, int pos, int len)
 {
-  if(isStackSortable(array, len))
+  int i ;
+  if(isStackSortable(array, len) && pos==len)
     {
-      printf("base case\n");
-      // create a binary tree and print it
+      TreeNode * root = NULL;
+      root = Tree_build(array, len);
+      Tree_printShapeHelper(root);
+      printf("\n");
+      Tree_destroy(root);
+      return;
     }
-  else
+
+  for(i=pos; i< len ;i++)
     {
-      int i=0;
-      for(i=pos; i< len ;i++)
-	{
-	  swap(array, 0,i);
-	  permute(array, pos+1, len);
-	  swap(array, i,0);
-	}
+      swap(&array[pos], &array[i]); 
+      permute(array, pos+1, len);
+      swap(&array[pos], &array[i]); 
     }
 }
 
@@ -228,7 +234,6 @@ void genShapes(int k)
   int i=0;
   for(i=0; i<k; i++)
     array[i]=i;
-
   permute(array, 0, k);
+  free(array);
 }
-
