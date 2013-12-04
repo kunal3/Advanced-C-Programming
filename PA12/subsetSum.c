@@ -48,13 +48,35 @@ void generateBinary(int l, int * subsets)
       }
 }
 
-void generateSubs(int l, int * subsets, int numSubs)
+int generateSubs(int * intset, int l, int N, int * subsets, int numSubs)
 {
   int i;
-  // for(i = 0; i < numSubs; i++)
-  // {
-  //    if(subsets[i]%2 == 1) // and then chop off last digit and so on
-  //}
+  int j;
+  // we may need individual to do it recursively
+  //int * indi = malloc(sizeof(int) * l); // individual
+  int sum = 0;
+  int Nmatch = 0;
+  
+  // at this we have 3 arrays-
+  // subsets contains subsets in binary form - 
+  // intset contains all numbers in decimal form in the set
+  // individual contains each subset, changes itself numSub times
+  // list: 92 87 23 89 126 023 17 -2 812 -23  corresponds
+  // binr:  1  0  1  0   1   1  1  1   1   0 BACKWARDS
+  
+  for(i = 0; i < numSubs; i++)
+    {
+      for(j = 0; j < l; j++)
+	{
+	  if(subsets[i]!=0) // or is 0000 a valid subset? sum is always 0
+	    if(subsets[i]%2 == 1) sum+= intset[j];
+	  subsets[i]/=10;
+        }
+      if(sum == N) Nmatch++;
+      sum = 0;
+    }
+
+  return Nmatch;
 }
 
 int subsetSum(int * intset, int length, int N, int numThread)
@@ -62,33 +84,33 @@ int subsetSum(int * intset, int length, int N, int numThread)
   int numSubs = pow(2,length);
   int * subsets = malloc(sizeof(int) * numSubs-1);
   
-  generateBinary(numSubs, subsets);
-  
-  int i = 0;
-  printf("Printing subsets:\n");
-  for(i = 0; i<numSubs; i++)
-    printf("%d\n", subsets[i]);
-  
-  generateSubs(numSubs, subsets, numSubs);
-  
+  generateBinary(numSubs, subsets);  
+  numSubs = generateSubs(intset, length, N, subsets, numSubs);
   
   free(subsets);
-  return 1;
+  return numSubs;
 }
 
 // clear && gcc -lm -Wall -Wshadow -g subsetSum.c && ./a.out
 
 int main(int argc, char ** argv)
 {
-  int length = 3;
+  int length = 5;
   int * array = malloc(sizeof(int) * length);
-  array[0] = -2;
-  array[1] = 1;
-  array[2] = 2;
-
+  array[0] = 97;
+  array[1] = 57;
+  array[2] = 49;
+  array[3] = 36;
+  array[4] = -25;
+  
+  // subset takes intset, length, N, numThread
   printf("\nnumSets: %d\n\n", subsetSum(array,length,0,0));
   
   free(array);
 
   return 0;
 }
+
+// answer to length = 5,
+// intset = 97 57 49 36 -25
+// sum = 0 is wrong
