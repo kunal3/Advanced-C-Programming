@@ -7,13 +7,14 @@
 #define SUCCESS 0
 #define FAILURE -1
 
-// function definition in pa12.h :
-// int subsetSum(int * intset, int length, int targetSumValue, int numThread);
-
-
-/* typedef struct{ */
-
-/* }Task; */
+typedef struct{
+  int * set;
+  int len;
+  int N;
+  int start;
+  int end;
+  int * counter;
+}Task;
 
 /*
 * Write a parallel C program that returns the answer for the following problem:
@@ -36,71 +37,44 @@
 * 	pthread.h and math.h are already included in this file.
 */
 
-void generateBinary(int l, int * subsets)
+int sumOf(int * set, int len, int mask)
 {
-  int i = 0;
-  int counter = 0;
-  for(i = 0; i < l; i++)
-    for(counter = 31; counter>=0; counter--)
-      {
-	if(i>>counter & 1) subsets[i] = subsets[i]*10 + 1;
-	else subsets[i] *= 10;
-      }
+  // cant take len > 30
+  int ret = 0;
+  int i;
+  for(i = 0; i < len; i++)
+    if((mask>>i)%2)
+      ret += set[i];
+  return ret;
 }
 
-int generateSubs(int * intset, int l, int N, int * subsets, int numSubs)
+void subsetSumTask (Task * task)
 {
-  int i;
-  int j;
-  // we may need individual to do it recursively
-  //int * indi = malloc(sizeof(int) * l); // individual
-  int sum = 0;
-  int Nmatch = 0;
-  int check = 1;
+  int count = subsetSumEq(task->set, task->len, task->N,
+			  task->start, task->end);
 
-  // at this we have 3 arrays-
-  // subsets contains subsets in binary form - 
-  // intset contains all numbers in decimal form in the set
-  // individual contains each subset, changes itself numSub times
-  // list: 92 87 23 89 126 023 17 -2 812 -23  corresponds
-  // binr:  1  0  1  0   1   1  1  1   1   0 BACKWARDS
-  
-  for(i = 0; i < numSubs; i++)
+}
+
+int subsetSumEq(int * set, int len, int N, int start, int end)
+{
+  int count = 0;
+  int i = 0;
+  for(i = start; i < end; ++i)
     {
-      check = 1;
-      printf("\nsubset[%d]:",i);
-      for(j = 0; j < l; j++)
+      if(sumOf(set, len, i) == N)
 	{
-	  if(j == 0 && subsets[i] == 0)
-	    check = 0;
-	  if(subsets[i]%2 == 1)
-	    {
-	      sum+= intset[j];
-	      printf(" %d",intset[j]);
-	    }
-	  subsets[i]/=10;
-        }
-      printf(",      sum = %d",sum);
-      if(sum == N && check) Nmatch++;
-      sum = 0;
+	  printf(set, len, i);
+	  count++;
+	}
     }
-
-  return Nmatch;
+  return count;
 }
 
 int subsetSum(int * intset, int length, int N, int numThread)
 {
-  int numSubs = pow(2,length);
-  int * subsets = malloc(sizeof(int) * numSubs-1);
-  
-  int i = 0;
-  printf("intset: ");
-  for(i = 0; i < length; i++)
-    {
-      printf("%d ", intset[i]);
-    }
-  printf("\nSum: %d",N);
-  
+  int numSubs = pow(2,length)-2;  // -2 because we are doing strict sets
+  int * subsets = malloc(sizeof(int) * numSubs-1); // -1 because NULL set is discarded
+    
   generateBinary(numSubs, subsets);  
   numSubs = generateSubs(intset, length, N, subsets, numSubs);
   
@@ -112,29 +86,55 @@ int subsetSum(int * intset, int length, int N, int numThread)
 
 int main(int argc, char ** argv)
 {
-  int length = 16;
-  int * array = malloc(sizeof(int) * length);
-  array[0] = 81;
-  array[1] = -29;
-  array[2] = -16;
-  array[3] = -66;  
-  array[4] = -80;
-  array[5] = 8;
-  array[6] = 9;
-  array[7] = 63;
-  array[8] = -30;
-  array[9] = 29;
-  array[10] = 32;
-  array[11] = 28;
-  array[12] = 80;
-  array[13] = 44;
-  array[14] = -86;
-  array[15] = 78;
-
-  // subset takes intset, length, N, numThread
-  printf("\nnumSets: %d\n\n", subsetSum(array,length,0,0));
+  int intset[] = {1, 2, 3, 4, 5};
+  int len = sizeof(intset)/sizeof(int);
+  int subsetSize = 1<<len;
   
-  free(array);
+  int i;
+  for(i = 0; i < subsetSize; ++i)
+    printf("sumOf(%d) = %d\n", i , sumOf(intset, len, i));
 
-  return 0;
+
+  int count = subsetSumEq(intset, len, N, start, end);
+  printf("\ncount = %d\n",count);
+  
+  return EXIT_SUCCESS;
 }
+
+
+// ====================== OLD CODE =====================================
+/* void generateBinary(int l, int * subsets) */
+/* { */
+/*   int i = 0; */
+/*   int counter = 0; */
+/*   for(i = 0; i < l; i++) */
+/*     for(counter = 31; counter>=00; counter--) */
+/*       if(i>>counter & 1) subsets[i] = subsets[i]*10 + 1; */
+/*       else subsets[i] *= 10; */
+/* } */
+
+/* int generateSubs(int * intset, int l, int N, int * subsets, int numSubs) */
+/* { */
+/*   int i; */
+/*   int j; */
+/*   int sum = 0; */
+/*   int Nmatch = 0; */
+/*   int check = 1; */
+
+/*   for(i = 0; i < numSubs; i++) */
+/*     { */
+/*       check = 1; */
+/*       for(j = 0; j < l; j++) */
+/* 	{ */
+/* 	  if(j == 0 && subsets[i] == 0) */
+/* 	    check = 0; */
+/* 	  if(subsets[i]%2 == 1) */
+/* 	    sum+= intset[j]; */
+/* 	  subsets[i]/=10; */
+/*         } */
+/*       if(sum == N && check) Nmatch++; */
+/*       sum = 0; */
+/*     } */
+/*   return Nmatch; */
+/* } */
+// =========================== END ===================================
