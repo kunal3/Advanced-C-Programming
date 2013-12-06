@@ -48,58 +48,90 @@ int sumOf(int * set, int len, int mask)
   return ret;
 }
 
-void subsetSumTask (Task * task)
-{
-  int count = subsetSumEq(task->set, task->len, task->N,
-			  task->start, task->end);
-
-}
-
 int subsetSumEq(int * set, int len, int N, int start, int end)
 {
   int count = 0;
   int i = 0;
   for(i = start; i < end; ++i)
-    {
       if(sumOf(set, len, i) == N)
-	{
-	  printf(set, len, i);
 	  count++;
-	}
-    }
   return count;
+}
+
+// so this will be passed to every thread, and this will call subsetSumEq
+// because threads require this function signature
+void * subsetSumTask (void * tasks)
+{
+  Task * task = (Task *)tasks;
+  int count = subsetSumEq(task->set, task->len, task->N, task->start, task->end);
+  task->counter = count;
+  return;
+}
+
+Task * createTasks(int * set, int len, int numThread, int N)
+{
+  Task * tasks[numThread];
+  int division = len/numThread;
+  int i = 0;
+  for(i = 0; i < numThread; i++)
+    {
+      tasks[i]->set = set;
+      tasks[i]->len = division;
+      tasks[i]->N = N;
+      tasks[i]->start = i*division;
+      tasks[i]->end = i*division + division;
+    }
+  // last set is a special case
+  --i;
+  tasks[i]->len = len - (i*division);
+  tasks[i]->end = len;
+  return tasks;
 }
 
 int subsetSum(int * intset, int length, int N, int numThread)
 {
-  int numSubs = pow(2,length)-2;  // -2 because we are doing strict sets
-  int * subsets = malloc(sizeof(int) * numSubs-1); // -1 because NULL set is discarded
-    
-  generateBinary(numSubs, subsets);  
-  numSubs = generateSubs(intset, length, N, subsets, numSubs);
+  int answer = 0;
+  int thread_ret = 0;
+ 
+  // create Tasks
+  Task * tasks = createTasks(intset, length, numThread, N);
+
+  // create threads
+  int i;
+  pthread_t threads[numThread];
+  for(i = 0; i < numThread ; i++)
+    thread_ret = pthread_create(&threads[i], NULL, subsetSumTask, (void*)&tasks[i]);
+  if(thread_ret) printf("Thread create failed.\n");
+
+  // run threads
   
-  free(subsets);
-  return numSubs;
+  // join threads
+  for(i = 0; i < numThread; i++)
+    pthread_join(threads[i], NULL);
+
+  // sum up results
+  for(i = 0; i < numThread; i++)
+    answer += threads[i];
+
+  // free memory
+
+  // return sum
+  return answer;
 }
 
 // clear && gcc -lm -Wall -Wshadow -g subsetSum.c && ./a.out
 
 int main(int argc, char ** argv)
 {
-  int intset[] = {1, 2, 3, 4, 5};
-  int len = sizeof(intset)/sizeof(int);
-  int subsetSize = 1<<len;
-  
-  int i;
-  for(i = 0; i < subsetSize; ++i)
-    printf("sumOf(%d) = %d\n", i , sumOf(intset, len, i));
-
-
-  int count = subsetSumEq(intset, len, N, start, end);
-  printf("\ncount = %d\n",count);
+  int intset[] = {1,2,3,4,5};
+  int length = sizeof(intset)/sizeof(int);
+  int N = 0;
+  int numThread = 5;
+  printf("\nanswer = %d\n",subsetSum(intset, length, N, numThread));
   
   return EXIT_SUCCESS;
 }
+
 
 
 // ====================== OLD CODE =====================================
