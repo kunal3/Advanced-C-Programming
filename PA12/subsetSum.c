@@ -13,7 +13,7 @@ typedef struct{
   int N;
   int start;
   int end;
-  int * counter;
+  int counter;
 }Task;
 
 /*
@@ -59,56 +59,40 @@ int subsetSumEq(int * set, int len, int N, int start, int end)
 
 void * subsetSumTask (void * tasks)
 {
-  Task * task = (Task *)tasks;
+  Task * task  = (Task *)tasks;
   int count = subsetSumEq(task->set, task->len, task->N, task->start, task->end);
+
   task->counter = count;
   printf("Print: %d\n", task->counter);
-  return;
+  return NULL;
 }
-
-/* Task * createTasks(int * set, int len, int numThread, int N) */
-/* { */
-/*   Task tasks[numThread]; */
-/*   int division = len/numThread; */
-/*   int i = 0; */
-/*   for(i = 0; i < numThread; i++) */
-/*     { */
-/*       tasks[i].set = set; */
-/*       tasks[i].len = division; */
-/*       tasks[i].N = N; */
-/*       tasks[i].start = i*division; */
-/*       tasks[i].end = i*division + division; */
-/*     } */
-/*   --i; */
-/*   tasks[i].len = len - (i*division); */
-/*   tasks[i].end = len; */
-/*   return tasks; */
-/* } */
 
 int subsetSum(int * intset, int length, int N, int numThread)
 {
   int answer = 0;
   int thread_ret = 0;
-  int i = 0;
-  
-  /* Task * tasks = createTasks(intset, length, numThread, N); */
-  
-  Task tasks[numThread];
+  int i = 0;  
   int numSubs = 1<<length;
   int division = numSubs/numThread;
+    
+  // create Tasks
+  Task * tasks = malloc(sizeof(Task) * numThread);
   for(i = 0; i < numThread; i++)
     {
       tasks[i].set = intset;
       tasks[i].len = length;
       tasks[i].N = N;
       tasks[i].start = i*division;
-      tasks[i].end = (i*division + division);
+      tasks[i].end = (tasks[i].start + division);
+      tasks[i].counter = 0;
     }
+  tasks[--i].end = numSubs;
+  tasks[0].start = 1;
 
   // create threads
-  pthread_t threads[numThread];
-  for(i = 0; i < numThread ; i++)
-    thread_ret = pthread_create(&threads[i], NULL, subsetSumTask, (void*)&tasks[i]);
+  pthread_t * threads = malloc(sizeof(pthread_t) * numThread);
+  for(i = 0; i < numThread && !thread_ret; i++)
+    thread_ret = pthread_create(&threads[i], NULL, subsetSumTask, (void *)&tasks[i]);
   if(thread_ret) printf("Thread create failed.\n");
 
   // join threads
@@ -118,32 +102,29 @@ int subsetSum(int * intset, int length, int N, int numThread)
   // sum up results
   answer = 0;
   for(i = 0; i < numThread; i++)
-    {
-      answer =  answer + tasks[i].counter;
-      printf("What? counter= %d + answer= %d\n",tasks[i].counter , answer);
-    }
-
-  // how do you free?
-  // free memory
-  //for(i = 0; i <numThread; i++)
-  //  free(threads[i]);
+    answer =  answer + tasks[i].counter;
   
+  // free memory
+  /* for(i = 0; i <numThread; i++) */
+  /*   { */
+  /*     free((void*)&tasks[i]); */
+  /*     free((void*)threads[i]); */
+  /*   } */
   return answer;
 }
 
-// clear && gcc -lm -Wall -Wshadow -g subsetSum.c && ./a.out
 // clear && gcc -lpthread -Wall -Wshadow -g subsetSum.c && ./a.out
 
-int main(int argc, char ** argv)
-{
-  int intset[] = {1,2,3,4};
-  int length = sizeof(intset)/sizeof(int);
-  int N = 0;
-  int numThread = 2;
-  printf("\nanswer = %d\n",subsetSum(intset, length, N, numThread));
+/* int main(int argc, char ** argv) */
+/* { */
+/*   int intset[] = {20, 66, 11, -98, 97}; */
+/*   int length = sizeof(intset)/sizeof(int); */
+/*   int N = 293; */
+/*   int numThread = 7; */
+/*   printf("\nanswer = %d\n",subsetSum(intset, length, N, numThread)); */
   
-  return EXIT_SUCCESS;
-}
+/*   return EXIT_SUCCESS; */
+/* } */
 
 
 
@@ -153,7 +134,7 @@ int main(int argc, char ** argv)
 /*   int i = 0; */
 /*   int counter = 0; */
 /*   for(i = 0; i < l; i++) */
-/*     for(counter = 31; counter>=00; counter--) */
+/*     for(counter = 31; counter>=0; counter--) */
 /*       if(i>>counter & 1) subsets[i] = subsets[i]*10 + 1; */
 /*       else subsets[i] *= 10; */
 /* } */
