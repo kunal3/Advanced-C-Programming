@@ -76,7 +76,7 @@ int subsetSum(int * intset, int length, int N, int numThread)
   int division = numSubs/numThread;
     
   // create Tasks
-  Task * tasks = malloc(sizeof(Task) * numThread);
+  Task tasks[numThread];
   for(i = 0; i < numThread; i++)
     {
       tasks[i].set = intset;
@@ -90,14 +90,17 @@ int subsetSum(int * intset, int length, int N, int numThread)
   tasks[0].start = 1;
 
   // create threads
-  pthread_t * threads = malloc(sizeof(pthread_t) * numThread);
+  pthread_t * threads[numThread]; //malloc(sizeof(pthread_t) * numThread);  // MALLOC 1 of 1
   for(i = 0; i < numThread && !thread_ret; i++)
-    thread_ret = pthread_create(&threads[i], NULL, subsetSumTask, (void *)&tasks[i]);
+    {
+      threads[i] = malloc(sizeof(pthread_t));
+      thread_ret = pthread_create(threads[i], NULL, subsetSumTask, (void *)&tasks[i]);
+    }
   if(thread_ret) printf("Thread create failed.\n");
 
   // join threads
   for(i = 0; i < numThread; i++)
-    pthread_join(threads[i], NULL);
+    pthread_join((*threads[i]), NULL);
 
   // sum up results
   answer = 0;
@@ -105,11 +108,9 @@ int subsetSum(int * intset, int length, int N, int numThread)
     answer =  answer + tasks[i].counter;
   
   // free memory
-  /* for(i = 0; i <numThread; i++) */
-  /*   { */
-  /*     free((void*)&tasks[i]); */
-  /*     free((void*)threads[i]); */
-  /*   } */
+  for(i = 0; i <numThread; i++)
+      free(threads[i]);
+
   return answer;
 }
 
